@@ -4,7 +4,7 @@ import 'package:studify/provider/admin/features/student.dart';
 import 'package:studify/provider/admin/features/batch.dart';
 import 'package:studify/provider/admin/features/attendance.dart';
 import 'package:studify/provider/admin/profile.dart';
-import 'package:studify/screens/admin/features/staff_attendance.dart';
+import 'package:studify/features/admin/screens/staff_attendance.dart';
 import 'package:studify/utils/appbar.dart';
 
 class StudentAttendanceScreen extends StatefulWidget {

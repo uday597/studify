@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:studify/provider/admin/features/student.dart';
 import 'package:studify/provider/admin/profile.dart';
-import 'package:studify/screens/admin/features/studentprofile.dart';
+import 'package:studify/features/admin/screens/studentprofile.dart';
 import 'package:studify/utils/appbar.dart';
 
 class StudentListScreen extends StatefulWidget {
@@ -104,21 +104,19 @@ class _StudentListScreenState extends State<StudentListScreen> {
                               radius: 26,
                               backgroundColor: Colors.blueAccent,
                               child: Text(
-                                _getSafeInitial(
-                                  student['name'],
-                                ), // Safe initial
+                                _getSafeInitial(student['name']),
                                 style: const TextStyle(color: Colors.white),
                               ),
                             ),
                             title: Text(
-                              _getSafeString(student['name']), // Safe name
+                              _getSafeString(student['name']),
                               style: const TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                             subtitle: Text(
-                              _getSafeString(student['email']), // Safe email
+                              _getSafeString(student['email']),
                               style: const TextStyle(color: Colors.black54),
                             ),
                             trailing: const Icon(

@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:studify/provider/admin/features/batch.dart';
 import 'package:studify/provider/admin/features/student.dart';
 import 'package:studify/provider/admin/profile.dart';
-import 'package:studify/screens/admin/auth/signup.dart';
+import 'package:studify/features/admin/auth/signup.dart';
 
 class AddStudentScreen extends StatefulWidget {
   const AddStudentScreen({super.key});
@@ -62,7 +62,12 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                 validator: (v) =>
                     v == null || v.isEmpty ? 'Enter student name' : null,
               ),
-              ReuseTextfield(controller: emailController, text: 'Email'),
+              ReuseTextfield(
+                controller: emailController,
+                text: 'Email',
+                validator: (v) =>
+                    v == null || v.isEmpty ? 'Enter father name' : null,
+              ),
               ReuseTextfield(
                 controller: fatherController,
                 text: 'Father Name',

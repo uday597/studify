@@ -52,6 +52,7 @@ class StudentProvider extends ChangeNotifier {
       await supabase.from('students').insert({
         'name': name,
         'father': father,
+        'email': email,
         'gender': gender,
         'mobile': mobile,
         'address': address,

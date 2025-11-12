@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:studify/provider/admin/features/batch.dart';
 import 'package:studify/provider/admin/features/student.dart';
 import 'package:studify/provider/admin/profile.dart';
-import 'package:studify/screens/admin/features/student_fees.dart';
+import 'package:studify/features/admin/screens/student_fees.dart';
 import 'package:studify/utils/appbar.dart';
 
 class TutionFees extends StatefulWidget {
@@ -55,7 +55,7 @@ class _TutionFeesState extends State<TutionFees> {
                 filled: true,
                 fillColor: Colors.white,
               ),
-              value: selectBatchId,
+              initialValue: selectBatchId,
               items: batchProvider.batches.map((batch) {
                 return DropdownMenuItem<String>(
                   value: batch['id'].toString(),

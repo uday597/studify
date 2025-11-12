@@ -371,6 +371,7 @@ class _StudentFeesScreenState extends State<StudentFeesScreen> {
 
                   try {
                     await feesProvider.addFee(
+                      status: selectedStatus,
                       studentId: widget.student['id'],
                       batchId: widget.batchId,
                       amount: amount,

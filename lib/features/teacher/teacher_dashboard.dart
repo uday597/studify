@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:studify/screens/student/studentoprofile.dart';
+import 'package:studify/features/teacher/teacher_profile.dart';
 import 'package:studify/utils/appbar.dart';
+import 'package:studify/utils/coming_soon.dart';
 import 'package:studify/utils/reuselist.dart';
 
-class StudentDashboard extends StatefulWidget {
-  final Map<String, dynamic> studentData;
-  const StudentDashboard({super.key, required this.studentData});
+class TeacherDashboard extends StatefulWidget {
+  final Map<String, dynamic> teacherData;
+  const TeacherDashboard({super.key, required this.teacherData});
 
   @override
-  State<StudentDashboard> createState() => _StudentDashboardState();
+  State<TeacherDashboard> createState() => _TeacherDashboardState();
 }
 
-class _StudentDashboardState extends State<StudentDashboard> {
+class _TeacherDashboardState extends State<TeacherDashboard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ReuseAppbar(name: 'Welcome Student'),
+      appBar: ReuseAppbar(name: 'Dashboard'),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -27,7 +29,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                          StudentProfile2(studenData: widget.studentData),
+                          TeacherProfile2(TecherData: widget.teacherData),
                     ),
                   );
                 },
@@ -56,7 +58,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          'Welcome ${widget.studentData['name']}',
+                          'Welcome ${widget.teacherData['name']}',
                           style: TextStyle(
                             color: Colors.deepPurple,
                             fontSize: 22,
@@ -72,16 +74,14 @@ class _StudentDashboardState extends State<StudentDashboard> {
               ),
             ),
             reuseList(
-              onTap: () {
-                Navigator.pushNamed(context, '/batchinfo');
-              },
+              onTap: () {},
               color: Colors.deepOrange,
               image: 'assets/images/batchicon.png',
               text: 'Batch Details',
             ),
             reuseList(
               onTap: () {
-                Navigator.pushNamed(context, '/academyinfo');
+                Navigator.pushNamed(context, '/teacheracademyinfo');
               },
               color: Colors.teal,
               image: 'assets/images/studenticon.png',
@@ -89,29 +89,31 @@ class _StudentDashboardState extends State<StudentDashboard> {
             ),
             reuseList(
               onTap: () {
-                Navigator.pushNamed(context, '/studentattendancehistory');
+                Navigator.pushNamed(context, '/teacher_attendacne_history');
               },
               color: Colors.lightBlue,
               image: 'assets/images/attendanceicon.png',
               text: 'Attendance',
             ),
             reuseList(
-              onTap: () {
-                Navigator.pushNamed(context, '/feeshistory');
-              },
-              color: Colors.purpleAccent,
+              onTap: () {},
+              color: Colors.purple,
               image: 'assets/images/stafficon.png',
-              text: 'Tution Fees',
+              text: 'Student List',
             ),
             reuseList(
-              onTap: () {},
-              color: Colors.redAccent,
+              onTap: () {
+                Navigator.pushNamed(context, '/teacherbatches');
+              },
+              color: Colors.red,
               image: 'assets/images/feesicon.png',
               text: 'Homework',
             ),
             reuseList(
-              onTap: () {},
-              color: Colors.black54,
+              onTap: () {
+                showComingSoon(context);
+              },
+              color: Colors.blueGrey,
               image: 'assets/images/settingsicon.png',
               text: 'Settings',
             ),

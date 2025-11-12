@@ -30,12 +30,12 @@ class FeesProvider extends ChangeNotifier {
     }
   }
 
-  // 🟢 Add new fee
   Future<void> addFee({
     required String studentId,
     required String batchId,
     required double amount,
     required int adminId,
+    required String status,
   }) async {
     try {
       await supabase.from('student_fees').insert({
@@ -43,7 +43,7 @@ class FeesProvider extends ChangeNotifier {
         'batch_id': batchId,
         'admin_id': adminId,
         'amount': amount,
-        'status': 'Pending',
+        'status': status,
         'submission_date': DateTime.now().toIso8601String().split('T')[0],
         'submission_time': DateTime.now()
             .toIso8601String()

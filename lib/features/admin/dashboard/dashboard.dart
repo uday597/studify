@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:studify/main.dart';
-import 'package:studify/screens/admin/features/staff_attendance.dart';
-import 'package:studify/screens/admin/features/student_attendance.dart';
+import 'package:studify/features/admin/screens/staff_attendance.dart';
+import 'package:studify/features/admin/screens/student_attendance.dart';
 import 'package:studify/utils/reuselist.dart';
 
 class AdminDashboard extends StatefulWidget {

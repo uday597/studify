@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:studify/screens/admin/profile/adminprofile.dart';
+import 'package:studify/features/admin/profile/adminprofile.dart';
 import 'package:studify/utils/appbar.dart';
 
-class TeacherProfile2 extends StatefulWidget {
-  final Map<String, dynamic> TecherData;
-  const TeacherProfile2({super.key, required this.TecherData});
+class StudentProfile2 extends StatefulWidget {
+  final Map<String, dynamic> studenData;
+  const StudentProfile2({super.key, required this.studenData});
 
   @override
-  State<TeacherProfile2> createState() => _TeacherProfile2State();
+  State<StudentProfile2> createState() => _StudentProfile2State();
 }
 
-class _TeacherProfile2State extends State<TeacherProfile2> {
+class _StudentProfile2State extends State<StudentProfile2> {
   @override
   Widget build(BuildContext context) {
-    final teacher = widget.TecherData;
+    final student = widget.studenData;
 
     return Scaffold(
       appBar: ReuseAppbar(name: 'Student Profile'),
@@ -28,7 +28,7 @@ class _TeacherProfile2State extends State<TeacherProfile2> {
                 radius: 55,
                 backgroundColor: Colors.blueAccent.withOpacity(0.2),
                 backgroundImage: const AssetImage(
-                  'assets/images/teacherlogo.jpg',
+                  'assets/images/studenttlogo.png',
                 ),
               ),
             ),
@@ -36,7 +36,7 @@ class _TeacherProfile2State extends State<TeacherProfile2> {
             const SizedBox(height: 15),
 
             const Text(
-              "teacher Details",
+              "Student Details",
               style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
@@ -57,20 +57,20 @@ class _TeacherProfile2State extends State<TeacherProfile2> {
                 padding: const EdgeInsets.all(12.0),
                 child: Column(
                   children: [
-                    buildTextField(label: teacher['name'], icon: Icons.person),
-                    buildTextField(label: teacher['email'], icon: Icons.mail),
+                    buildTextField(label: student['name'], icon: Icons.person),
+                    buildTextField(label: student['email'], icon: Icons.mail),
 
-                    buildTextField(label: teacher['mobile'], icon: Icons.phone),
+                    buildTextField(label: student['mobile'], icon: Icons.phone),
                     buildTextField(
-                      label: teacher['salary'],
+                      label: student['father'],
                       icon: Icons.person_2,
                     ),
                     buildTextField(
-                      label: teacher['address'],
+                      label: student['address'],
                       icon: Icons.location_on,
                     ),
                     buildTextField(
-                      label: teacher['password'],
+                      label: student['password'],
                       icon: Icons.password,
                     ),
 

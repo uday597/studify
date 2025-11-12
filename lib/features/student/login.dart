@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:studify/provider/student/login.dart';
-import 'package:studify/screens/admin/auth/signup.dart';
-import 'package:studify/screens/student/dashboard.dart';
+import 'package:studify/features/admin/auth/signup.dart';
+import 'package:studify/features/student/dashboard.dart';
 
 class StudentLogin extends StatefulWidget {
   const StudentLogin({super.key});
@@ -26,7 +26,7 @@ class _StudentLoginState extends State<StudentLogin> {
     );
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),

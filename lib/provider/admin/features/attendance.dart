@@ -111,6 +111,22 @@ class AttendanceProvider extends ChangeNotifier {
     }
   }
 
+  Future<List<Map<String, dynamic>>> getTeacherAttendanceHistory({
+    required String teacherId,
+  }) async {
+    try {
+      final data = await supabase
+          .from('teacher_attendance')
+          .select('*')
+          .eq('teacher_id', teacherId)
+          .order('date', ascending: false);
+
+      return data.cast<Map<String, dynamic>>();
+    } catch (e) {
+      throw Exception('Error fetching history: $e');
+    }
+  }
+
   // Rest of your methods remain same...
   Future<List<Map<String, dynamic>>> getTeacherAttendance({
     required int adminId,

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:studify/provider/teacher/login.dart';
-import 'package:studify/screens/admin/auth/signup.dart';
-import 'package:studify/screens/teacher/teacher_dashboard.dart';
+import 'package:studify/features/admin/auth/signup.dart';
+import 'package:studify/features/teacher/teacher_dashboard.dart';
 
 class TeacherLogin extends StatefulWidget {
   const TeacherLogin({super.key});
@@ -20,6 +20,7 @@ class _TeacherLoginState extends State<TeacherLogin> {
   Widget build(BuildContext context) {
     final provider = Provider.of<TeacherLoginProvider>(context, listen: false);
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),

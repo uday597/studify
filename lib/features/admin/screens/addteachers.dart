@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:studify/provider/admin/features/teacher.dart';
 import 'package:studify/provider/admin/profile.dart';
-import 'package:studify/screens/admin/auth/signup.dart';
-import 'package:studify/screens/admin/features/teacher_profile.dart';
+import 'package:studify/features/admin/auth/signup.dart';
+import 'package:studify/features/admin/screens/teacher_profile.dart';
 import 'package:studify/utils/appbar.dart';
 
 class AddTeachers extends StatefulWidget {

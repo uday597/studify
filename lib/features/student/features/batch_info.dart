@@ -71,6 +71,7 @@ class _BatchInfoState extends State<BatchInfo> {
 
     return Scaffold(
       appBar: ReuseAppbar(name: 'Batch Information'),
+      backgroundColor: Colors.white,
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : batchData == null
@@ -103,7 +104,7 @@ class _BatchInfoState extends State<BatchInfo> {
         children: [
           Card(
             elevation: 4,
-            color: Colors.lightBlue,
+            color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(
@@ -118,15 +119,10 @@ class _BatchInfoState extends State<BatchInfo> {
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
                     ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 5),
-                  Text(
-                    batchData!['location'] ?? 'No Location',
-                    style: const TextStyle(fontSize: 16, color: Colors.white70),
-                  ),
                 ],
               ),
             ),
@@ -135,6 +131,7 @@ class _BatchInfoState extends State<BatchInfo> {
           const SizedBox(height: 20),
 
           Card(
+            color: Colors.white,
             elevation: 3,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -182,6 +179,7 @@ class _BatchInfoState extends State<BatchInfo> {
 
           // Student Information Card
           Card(
+            color: Colors.white,
             elevation: 3,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -236,6 +234,7 @@ class _BatchInfoState extends State<BatchInfo> {
 
           // Additional Information
           Card(
+            color: Colors.white,
             elevation: 2,
             child: Padding(
               padding: const EdgeInsets.all(16.0),

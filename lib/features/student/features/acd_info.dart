@@ -35,10 +35,8 @@ class _AcademyInfoState extends State<AcademyInfo> {
       final studentData = studentProvider.studentData;
 
       if (studentData != null && studentData['admin_id'] != null) {
-        // Get admin_id from student data
         final adminId = studentData['admin_id'];
 
-        // Directly fetch admin data using supabase
         final adminResponse = await supabase
             .from('admin')
             .select()
@@ -85,6 +83,7 @@ class _AcademyInfoState extends State<AcademyInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ReuseAppbar(name: 'Academy Information'),
+      backgroundColor: Colors.white,
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : adminData == null
@@ -114,7 +113,6 @@ class _AcademyInfoState extends State<AcademyInfo> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // Academy Banner Image
           Container(
             height: 180,
             width: double.infinity,
@@ -127,10 +125,10 @@ class _AcademyInfoState extends State<AcademyInfo> {
 
           const SizedBox(height: 20),
 
-          // Academy Info Section
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Card(
+              color: Colors.white,
               elevation: 2,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -174,6 +172,7 @@ class _AcademyInfoState extends State<AcademyInfo> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Card(
+              color: Colors.white,
               elevation: 2,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),

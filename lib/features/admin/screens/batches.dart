@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:studify/provider/admin/features/batch.dart';
 import 'package:studify/provider/admin/profile.dart';
-import 'package:studify/screens/admin/features/studentlist.dart';
+import 'package:studify/features/admin/screens/studentlist.dart';
 import 'package:studify/utils/appbar.dart';
-import 'package:studify/screens/admin/auth/signup.dart';
+import 'package:studify/features/admin/auth/signup.dart';
 
 class Batches extends StatefulWidget {
   const Batches({super.key});

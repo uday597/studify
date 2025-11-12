@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:studify/screens/admin/auth/login.dart';
-import 'package:studify/screens/admin/auth/signup.dart';
-import 'package:studify/screens/admin/dashboard/dashboard.dart';
-import 'package:studify/screens/admin/features/batches.dart';
-import 'package:studify/screens/admin/features/students.dart';
-import 'package:studify/screens/admin/features/addteachers.dart';
-import 'package:studify/screens/admin/features/fees_student.dart';
-import 'package:studify/screens/admin/profile/adminprofile.dart';
-import 'package:studify/screens/rolescreen/rolescreen.dart';
-import 'package:studify/screens/splashscreen/splashscreen.dart';
-import 'package:studify/screens/student/features/acd_info.dart';
-import 'package:studify/screens/student/features/attendance_history.dart';
-import 'package:studify/screens/student/features/batch_info.dart';
-import 'package:studify/screens/student/features/fees_history.dart';
-import 'package:studify/screens/student/login.dart';
-import 'package:studify/screens/teacher/features/batch_info.dart';
-import 'package:studify/screens/teacher/teacher_login.dart';
+import 'package:studify/features/admin/auth/login.dart';
+import 'package:studify/features/admin/auth/signup.dart';
+import 'package:studify/features/admin/dashboard/dashboard.dart';
+import 'package:studify/features/admin/screens/batches.dart';
+import 'package:studify/features/admin/screens/students.dart';
+import 'package:studify/features/admin/screens/addteachers.dart';
+import 'package:studify/features/admin/screens/fees_student.dart';
+import 'package:studify/features/admin/profile/adminprofile.dart';
+import 'package:studify/features/rolescreen/rolescreen.dart';
+import 'package:studify/features/splashscreen/splashscreen.dart';
+import 'package:studify/features/student/features/acd_info.dart';
+import 'package:studify/features/student/features/attendance_history.dart';
+import 'package:studify/features/student/features/batch_info.dart';
+import 'package:studify/features/student/features/fees_history.dart';
+import 'package:studify/features/student/login.dart';
+import 'package:studify/features/teacher/screens/academy_info.dart';
+import 'package:studify/features/teacher/screens/attendace_history.dart';
+import 'package:studify/features/teacher/screens/batch_details.dart';
+import 'package:studify/features/teacher/teacher_login.dart';
 
 class AppRouting {
   static Map<String, WidgetBuilder> routes = {
@@ -35,6 +37,8 @@ class AppRouting {
     '/batchinfo': (context) => BatchInfo(),
     '/academyinfo': (context) => AcademyInfo(),
     '/studentattendancehistory': (context) => StudentAttendanceHistory(),
-    '/teacherbatchinfo': (context) => TeacherBatchDetails(),
+    '/teacher_attendacne_history': (context) => TeacherHistoryScreen(),
+    '/teacheracademyinfo': (context) => TeacherAcademyInfo(),
+    '/teacherbatches': (context) => TeacherBatchesScreen(),
   };
 }

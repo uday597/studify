@@ -67,7 +67,7 @@ class _StudentFeesHistoryState extends State<StudentFeesHistory> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Student data not available. Please login again.'),
-            backgroundColor: Colors.orange,
+            backgroundColor: Colors.red,
           ),
         );
       }
@@ -91,12 +91,14 @@ class _StudentFeesHistoryState extends State<StudentFeesHistory> {
 
     return Scaffold(
       appBar: ReuseAppbar(name: 'My Fees History'),
+      backgroundColor: Colors.white,
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Column(
               children: [
                 // Student Info Card
                 Card(
+                  color: Colors.white,
                   margin: const EdgeInsets.all(16),
                   elevation: 3,
                   child: Padding(
@@ -132,6 +134,11 @@ class _StudentFeesHistoryState extends State<StudentFeesHistory> {
                                 style: const TextStyle(color: Colors.grey),
                               ),
                               const SizedBox(height: 2),
+                              Text(
+                                studentData['mobile']?.toString() ??
+                                    'No mobile',
+                                style: const TextStyle(color: Colors.grey),
+                              ),
                             ],
                           ),
                         ),
@@ -211,6 +218,7 @@ class _StudentFeesHistoryState extends State<StudentFeesHistory> {
     final time = fee['submission_time'] ?? 'N/A';
 
     return Card(
+      color: Colors.white,
       margin: const EdgeInsets.symmetric(vertical: 6),
       elevation: 2,
       child: ListTile(
@@ -219,12 +227,12 @@ class _StudentFeesHistoryState extends State<StudentFeesHistory> {
           decoration: BoxDecoration(
             color: isPaid
                 ? Colors.green.withOpacity(0.1)
-                : Colors.orange.withOpacity(0.1),
+                : Colors.red.withOpacity(0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
             isPaid ? Icons.check_circle : Icons.pending,
-            color: isPaid ? Colors.green : Colors.orange,
+            color: isPaid ? Colors.green : Colors.red,
             size: 24,
           ),
         ),
@@ -233,7 +241,7 @@ class _StudentFeesHistoryState extends State<StudentFeesHistory> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18,
-            color: isPaid ? Colors.green : Colors.orange,
+            color: isPaid ? Colors.green : Colors.red,
           ),
         ),
         subtitle: Column(
@@ -243,7 +251,7 @@ class _StudentFeesHistoryState extends State<StudentFeesHistory> {
             Text(
               'Status: ${fee['status']}',
               style: TextStyle(
-                color: isPaid ? Colors.green : Colors.orange,
+                color: isPaid ? Colors.green : Colors.red,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -260,7 +268,7 @@ class _StudentFeesHistoryState extends State<StudentFeesHistory> {
         trailing: Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: isPaid ? Colors.green : Colors.orange,
+            color: isPaid ? Colors.green : Colors.red,
             borderRadius: BorderRadius.circular(12),
           ),
           child: Text(

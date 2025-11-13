@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:studify/features/teacher/screens/homework.dart';
 import 'package:studify/provider/admin/features/batch.dart';
 import 'package:studify/provider/teacher/login.dart';
 import 'package:studify/utils/appbar.dart';
 
-class TeacherBatchesScreen extends StatefulWidget {
-  const TeacherBatchesScreen({super.key});
+class BathcesList extends StatefulWidget {
+  const BathcesList({super.key});
 
   @override
-  State<TeacherBatchesScreen> createState() => _TeacherBatchesScreenState();
+  State<BathcesList> createState() => _BathcesListState();
 }
 
-class _TeacherBatchesScreenState extends State<TeacherBatchesScreen> {
+class _BathcesListState extends State<BathcesList> {
   @override
   void initState() {
     super.initState();
@@ -35,75 +34,72 @@ class _TeacherBatchesScreenState extends State<TeacherBatchesScreen> {
   @override
   Widget build(BuildContext context) {
     final batchProvider = context.watch<BatchProvider>();
-    final teacherData = context.watch<TeacherLoginProvider>().teacherData;
 
     return Scaffold(
+      backgroundColor: Colors.white, // full white background
       appBar: ReuseAppbar(name: 'My Batches'),
-      backgroundColor: Colors.white,
-      body: batchProvider.batches.isEmpty
-          ? const Center(
-              child: Text(
-                'No batches available',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w500,
+      body: RefreshIndicator(
+        onRefresh: _loadBatches,
+        child: batchProvider.batches.isEmpty
+            ? const Center(
+                child: Text(
+                  'No batches available',
+                  style: TextStyle(fontSize: 18, color: Colors.grey),
                 ),
-              ),
-            )
-          : ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: batchProvider.batches.length,
-              itemBuilder: (context, index) {
-                final batch = batchProvider.batches[index];
+              )
+            : ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 20,
+                ),
+                itemCount: batchProvider.batches.length,
+                itemBuilder: (context, index) {
+                  final batch = batchProvider.batches[index];
 
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => HomeworkListScreen(
-                          batchId: batch['id'].toString(),
-                          batchName: batch['name'] ?? 'Batch',
-                          adminId: teacherData?['admin_id'] ?? 0,
-                          teacherId: teacherData?['id'].toString() ?? '',
-                        ),
-                      ),
-                    );
-                  },
-                  child: Container(
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
                     margin: const EdgeInsets.only(bottom: 16),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(18),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.grey.withOpacity(0.15),
-                          blurRadius: 8,
+                          color: Colors.black.withOpacity(0.08),
+                          blurRadius: 10,
+                          spreadRadius: 1,
                           offset: const Offset(0, 4),
                         ),
                       ],
+                      border: Border.all(color: Colors.blue.withOpacity(0.1)),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 14,
-                      ),
+                      padding: const EdgeInsets.all(18.0),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          CircleAvatar(
-                            radius: 26,
-                            backgroundColor: Colors.blue.shade50,
-                            child: Text(
-                              '${index + 1}',
-                              style: const TextStyle(
-                                color: Colors.blue,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                          // Batch icon with number
+                          Container(
+                            height: 55,
+                            width: 55,
+                            decoration: BoxDecoration(
+                              color: Colors.blue.withOpacity(0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                '${index + 1}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Colors.blueAccent,
+                                ),
                               ),
                             ),
                           ),
                           const SizedBox(width: 16),
+
+                          // Batch details
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -111,45 +107,48 @@ class _TeacherBatchesScreenState extends State<TeacherBatchesScreen> {
                                 Text(
                                   batch['name'] ?? 'No Name',
                                   style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold,
                                     color: Colors.black87,
                                   ),
                                 ),
-                                const SizedBox(height: 4),
+                                const SizedBox(height: 8),
+
                                 Row(
                                   children: [
                                     const Icon(
                                       Icons.location_on_outlined,
-                                      color: Colors.grey,
-                                      size: 18,
+                                      color: Colors.blueAccent,
+                                      size: 20,
                                     ),
                                     const SizedBox(width: 6),
                                     Expanded(
                                       child: Text(
                                         batch['location'] ?? 'No Location',
                                         style: const TextStyle(
-                                          color: Colors.black54,
                                           fontSize: 15,
+                                          color: Colors.black54,
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 4),
+
+                                const SizedBox(height: 6),
+
                                 Row(
                                   children: [
                                     const Icon(
                                       Icons.person_outline,
-                                      color: Colors.grey,
-                                      size: 18,
+                                      color: Colors.blueAccent,
+                                      size: 20,
                                     ),
                                     const SizedBox(width: 6),
                                     Text(
                                       batch['incharge'] ?? 'No Incharge',
                                       style: const TextStyle(
-                                        color: Colors.black54,
                                         fontSize: 15,
+                                        color: Colors.black54,
                                       ),
                                     ),
                                   ],
@@ -157,18 +156,13 @@ class _TeacherBatchesScreenState extends State<TeacherBatchesScreen> {
                               ],
                             ),
                           ),
-                          const Icon(
-                            Icons.arrow_forward_ios,
-                            size: 18,
-                            color: Colors.grey,
-                          ),
                         ],
                       ),
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
+      ),
     );
   }
 }

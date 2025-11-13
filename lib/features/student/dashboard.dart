@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:studify/features/student/features/homework.dart';
 import 'package:studify/features/student/studentoprofile.dart';
 import 'package:studify/utils/appbar.dart';
+import 'package:studify/utils/coming_soon.dart';
 import 'package:studify/utils/reuselist.dart';
 
 class StudentDashboard extends StatefulWidget {
@@ -122,7 +123,9 @@ class _StudentDashboardState extends State<StudentDashboard> {
               text: 'Homework',
             ),
             reuseList(
-              onTap: () {},
+              onTap: () {
+                showComingSoon(context);
+              },
               color: Colors.blueGrey,
               image: 'assets/images/settingsicon.png',
               text: 'Settings',

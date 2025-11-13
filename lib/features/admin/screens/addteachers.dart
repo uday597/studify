@@ -53,7 +53,7 @@ class _AddTeachersState extends State<AddTeachers> {
 
     return Scaffold(
       appBar: ReuseAppbar(name: 'Teachers'),
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.white,
       body: teacherProvider.teachers.isEmpty
           ? const Center(child: CircularProgressIndicator())
           : Padding(
@@ -73,6 +73,7 @@ class _AddTeachersState extends State<AddTeachers> {
                       );
                     },
                     child: Card(
+                      color: Colors.white,
                       elevation: 3,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -241,56 +242,63 @@ class _AddTeachersState extends State<AddTeachers> {
                         ),
                         const SizedBox(height: 12),
 
-                        const Text(
-                          "Gender",
-                          style: TextStyle(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Text(
+                            "Gender",
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black87,
+                            ),
                           ),
                         ),
                         const SizedBox(height: 4),
-                        Wrap(
-                          spacing: 8,
-                          runSpacing: 0,
-                          children: [
-                            ChoiceChip(
-                              label: const Text("Male"),
-                              selected: localGender == "Male",
-                              selectedColor: Colors.blueAccent,
-                              labelStyle: TextStyle(
-                                color: localGender == "Male"
-                                    ? Colors.white
-                                    : Colors.black87,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Wrap(
+                            spacing: 8,
+                            runSpacing: 0,
+                            children: [
+                              ChoiceChip(
+                                label: const Text("Male"),
+                                selected: localGender == "Male",
+                                selectedColor: Colors.blueAccent,
+                                labelStyle: TextStyle(
+                                  color: localGender == "Male"
+                                      ? Colors.white
+                                      : Colors.black87,
+                                ),
+                                onSelected: (_) =>
+                                    setStateDialog(() => localGender = "Male"),
                               ),
-                              onSelected: (_) =>
-                                  setStateDialog(() => localGender = "Male"),
-                            ),
-                            ChoiceChip(
-                              label: const Text("Female"),
-                              selected: localGender == "Female",
-                              selectedColor: Colors.pinkAccent,
-                              labelStyle: TextStyle(
-                                color: localGender == "Female"
-                                    ? Colors.white
-                                    : Colors.black87,
+                              ChoiceChip(
+                                label: const Text("Female"),
+                                selected: localGender == "Female",
+                                selectedColor: Colors.pinkAccent,
+                                labelStyle: TextStyle(
+                                  color: localGender == "Female"
+                                      ? Colors.white
+                                      : Colors.black87,
+                                ),
+                                onSelected: (_) => setStateDialog(
+                                  () => localGender = "Female",
+                                ),
                               ),
-                              onSelected: (_) =>
-                                  setStateDialog(() => localGender = "Female"),
-                            ),
-                            ChoiceChip(
-                              label: const Text("Other"),
-                              selected: localGender == "Other",
-                              selectedColor: Colors.purpleAccent,
-                              labelStyle: TextStyle(
-                                color: localGender == "Other"
-                                    ? Colors.white
-                                    : Colors.black87,
+                              ChoiceChip(
+                                label: const Text("Other"),
+                                selected: localGender == "Other",
+                                selectedColor: Colors.purpleAccent,
+                                labelStyle: TextStyle(
+                                  color: localGender == "Other"
+                                      ? Colors.white
+                                      : Colors.black87,
+                                ),
+                                onSelected: (_) =>
+                                    setStateDialog(() => localGender = "Other"),
                               ),
-                              onSelected: (_) =>
-                                  setStateDialog(() => localGender = "Other"),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
 
                         const SizedBox(height: 12),
@@ -302,11 +310,17 @@ class _AddTeachersState extends State<AddTeachers> {
                         ),
                         const SizedBox(height: 12),
                         ReuseTextfield(
+                          keyboardType: TextInputType.phone,
                           controller: mobileController,
                           text: 'Mobile Number',
-                          validator: (v) => v == null || v.isEmpty
-                              ? 'Enter mobile number'
-                              : null,
+                          validator: (v) {
+                            final pattern = RegExp(r'^(?:\+91)?[6-9]\d{9}$');
+
+                            if (!pattern.hasMatch(v!.trim())) {
+                              return 'Enter valid mobile number (e.g. +919876543210 or 9876543210)';
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 12),
                         ReuseTextfield(

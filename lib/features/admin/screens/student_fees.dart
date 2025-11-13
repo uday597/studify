@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:studify/provider/admin/features/fees.dart';
 import 'package:studify/provider/admin/profile.dart';
+import 'package:studify/utils/appbar.dart';
 
 class StudentFeesScreen extends StatefulWidget {
   final Map<String, dynamic> student;
@@ -56,11 +57,8 @@ class _StudentFeesScreenState extends State<StudentFeesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Fees - ${widget.student['name']}'),
-        backgroundColor: Colors.blueAccent,
-        foregroundColor: Colors.white,
-      ),
+      appBar: ReuseAppbar(name: 'Fees - ${widget.student['name']}'),
+      backgroundColor: Colors.white,
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : Padding(
@@ -69,6 +67,7 @@ class _StudentFeesScreenState extends State<StudentFeesScreen> {
                 children: [
                   // Student Info Card
                   Card(
+                    color: Colors.white,
                     elevation: 3,
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
@@ -231,6 +230,7 @@ class _StudentFeesScreenState extends State<StudentFeesScreen> {
     final isPaid = fee['status'] == 'Paid';
 
     return Card(
+      color: Colors.white,
       margin: const EdgeInsets.symmetric(vertical: 8),
       elevation: 3,
       child: ListTile(
@@ -239,12 +239,12 @@ class _StudentFeesScreenState extends State<StudentFeesScreen> {
           decoration: BoxDecoration(
             color: isPaid
                 ? Colors.green.withOpacity(0.1)
-                : Colors.orange.withOpacity(0.1),
+                : Colors.red.withOpacity(0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
             isPaid ? Icons.check_circle : Icons.pending,
-            color: isPaid ? Colors.green : Colors.orange,
+            color: isPaid ? Colors.green : Colors.red,
             size: 24,
           ),
         ),
@@ -253,7 +253,7 @@ class _StudentFeesScreenState extends State<StudentFeesScreen> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18,
-            color: isPaid ? Colors.green : Colors.orange,
+            color: isPaid ? Colors.green : Colors.red,
           ),
         ),
         subtitle: Column(
@@ -263,7 +263,7 @@ class _StudentFeesScreenState extends State<StudentFeesScreen> {
             Text(
               'Status: ${fee['status']}',
               style: TextStyle(
-                color: isPaid ? Colors.green : Colors.orange,
+                color: isPaid ? Colors.green : Colors.red,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -299,6 +299,7 @@ class _StudentFeesScreenState extends State<StudentFeesScreen> {
       builder: (context) => StatefulBuilder(
         builder: (context, setState) {
           return AlertDialog(
+            backgroundColor: Colors.white,
             title: const Row(
               children: [
                 Icon(Icons.money, color: Colors.green),
@@ -533,6 +534,7 @@ class _StudentFeesScreenState extends State<StudentFeesScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
         title: const Row(
           children: [
             Icon(Icons.history, color: Colors.purple),
@@ -557,17 +559,18 @@ class _StudentFeesScreenState extends State<StudentFeesScreen> {
                     final isPaid = fee['status'] == 'Paid';
 
                     return Card(
+                      color: Colors.white,
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       child: ListTile(
                         leading: Icon(
                           isPaid ? Icons.check_circle : Icons.pending,
-                          color: isPaid ? Colors.green : Colors.orange,
+                          color: isPaid ? Colors.green : Colors.red,
                         ),
                         title: Text(
                           '₹${fee['amount']}',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            color: isPaid ? Colors.green : Colors.orange,
+                            color: isPaid ? Colors.green : Colors.red,
                           ),
                         ),
                         subtitle: Column(

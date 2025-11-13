@@ -47,12 +47,14 @@ class _StudentAttendanceScreenState extends State<StudentAttendanceScreen> {
 
     return Scaffold(
       appBar: ReuseAppbar(name: 'Mark Student Attendance'),
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Card(
+              color: Colors.white,
               margin: const EdgeInsets.only(bottom: 16),
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -121,6 +123,7 @@ class _StudentAttendanceScreenState extends State<StudentAttendanceScreen> {
                       final student = studentProvider.StudentList[index];
                       final studentId = student['id'];
                       return Card(
+                        color: Colors.white,
                         child: ListTile(
                           leading: CircleAvatar(
                             child: Text(student['name'][0].toUpperCase()),

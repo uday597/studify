@@ -4,6 +4,7 @@ import 'package:studify/provider/admin/features/batch.dart';
 import 'package:studify/provider/admin/features/student.dart';
 import 'package:studify/provider/admin/profile.dart';
 import 'package:studify/features/admin/auth/signup.dart';
+import 'package:studify/utils/appbar.dart';
 
 class AddStudentScreen extends StatefulWidget {
   const AddStudentScreen({super.key});
@@ -49,7 +50,8 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
     final studentProvider = Provider.of<StudentProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Student')),
+      appBar: ReuseAppbar(name: 'Add Student'),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -156,7 +158,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                         mobile: mobileController.text,
                         address: addressController.text,
                         batchId: selectedBatchId!,
-                        adminId: adminProvider.adminId!, // ✅ SAFE NOW
+                        adminId: adminProvider.adminId!,
                       );
 
                       Navigator.pop(context);
@@ -167,6 +169,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                     }
                   }
                 },
+
                 child: const Text('Save Student'),
               ),
             ],

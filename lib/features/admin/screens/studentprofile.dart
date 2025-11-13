@@ -22,6 +22,7 @@ class _StudentProfileState extends State<StudentProfile> {
 
     return Scaffold(
       appBar: ReuseAppbar(name: 'Student Profile'),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -53,6 +54,7 @@ class _StudentProfileState extends State<StudentProfile> {
 
             // 📝 Student Info
             Card(
+              color: Colors.white,
               margin: const EdgeInsets.all(12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),
@@ -213,6 +215,7 @@ class _StudentProfileState extends State<StudentProfile> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
         title: const Center(child: Text('Edit Student Details')),
         content: SingleChildScrollView(
           child: Column(

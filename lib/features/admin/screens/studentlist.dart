@@ -56,6 +56,7 @@ class _StudentListScreenState extends State<StudentListScreen> {
 
     return Scaffold(
       appBar: ReuseAppbar(name: '${widget.batchName} - Students'),
+      backgroundColor: Colors.white,
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : students.isEmpty
@@ -90,6 +91,7 @@ class _StudentListScreenState extends State<StudentListScreen> {
                       itemBuilder: (context, index) {
                         final student = students[index];
                         return Card(
+                          color: Colors.white,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),

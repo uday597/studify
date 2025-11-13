@@ -74,7 +74,9 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               ),
             ),
             reuseList(
-              onTap: () {},
+              onTap: () {
+                Navigator.pushNamed(context, '/batcheslist');
+              },
               color: Colors.deepOrange,
               image: 'assets/images/batchicon.png',
               text: 'Batch Details',
@@ -95,12 +97,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               image: 'assets/images/attendanceicon.png',
               text: 'Attendance',
             ),
-            reuseList(
-              onTap: () {},
-              color: Colors.purple,
-              image: 'assets/images/stafficon.png',
-              text: 'Student List',
-            ),
+
             reuseList(
               onTap: () {
                 Navigator.pushNamed(context, '/teacherbatches');

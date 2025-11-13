@@ -3,6 +3,8 @@ import 'package:studify/features/admin/auth/login.dart';
 import 'package:studify/features/admin/auth/signup.dart';
 import 'package:studify/features/admin/dashboard/dashboard.dart';
 import 'package:studify/features/admin/screens/batches.dart';
+import 'package:studify/features/admin/screens/contact.dart';
+import 'package:studify/features/admin/screens/notification.dart';
 import 'package:studify/features/admin/screens/students.dart';
 import 'package:studify/features/admin/screens/addteachers.dart';
 import 'package:studify/features/admin/screens/fees_student.dart';
@@ -17,6 +19,7 @@ import 'package:studify/features/student/login.dart';
 import 'package:studify/features/teacher/screens/academy_info.dart';
 import 'package:studify/features/teacher/screens/attendace_history.dart';
 import 'package:studify/features/teacher/screens/batch_details.dart';
+import 'package:studify/features/teacher/screens/bathces_list.dart';
 import 'package:studify/features/teacher/teacher_login.dart';
 
 class AppRouting {
@@ -40,5 +43,8 @@ class AppRouting {
     '/teacher_attendacne_history': (context) => TeacherHistoryScreen(),
     '/teacheracademyinfo': (context) => TeacherAcademyInfo(),
     '/teacherbatches': (context) => TeacherBatchesScreen(),
+    '/batcheslist': (context) => BathcesList(),
+    '/contactsupport': (context) => ContactUs(),
+    '/notifications': (context) => NotificationScreen(),
   };
 }

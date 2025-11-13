@@ -197,10 +197,12 @@ Widget ReuseTextfield({
   required String text,
   bool readonly = false,
   String? Function(String?)? validator,
+  TextInputType keyboardType = TextInputType.text,
 }) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: TextFormField(
+      keyboardType: keyboardType,
       controller: controller,
       readOnly: readonly,
       validator: validator,

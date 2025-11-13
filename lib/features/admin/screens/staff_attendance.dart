@@ -45,12 +45,14 @@ class _TeacherAttendanceScreenState extends State<TeacherAttendanceScreen> {
 
     return Scaffold(
       appBar: ReuseAppbar(name: 'Mark Teacher Attendance'),
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
             // Add date display
             Card(
+              color: Colors.white,
               margin: const EdgeInsets.only(bottom: 16),
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -109,6 +111,7 @@ class _TeacherAttendanceScreenState extends State<TeacherAttendanceScreen> {
                             attendanceStatus[teacherId] ?? 'Present';
 
                         return Card(
+                          color: Colors.white,
                           margin: const EdgeInsets.symmetric(vertical: 8),
                           elevation: 2,
                           child: ListTile(

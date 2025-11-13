@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:studify/main.dart';
 import 'package:studify/features/admin/screens/staff_attendance.dart';
 import 'package:studify/features/admin/screens/student_attendance.dart';
+import 'package:studify/utils/coming_soon.dart';
 import 'package:studify/utils/reuselist.dart';
 
 class AdminDashboard extends StatefulWidget {
@@ -41,7 +42,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
+          IconButton(
+            onPressed: () {
+              Navigator.pushNamed(context, '/notifications');
+            },
+            icon: const Icon(Icons.notifications),
+          ),
         ],
         leading: Builder(
           builder: (context) => IconButton(
@@ -114,7 +120,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               leading: Icon(Icons.settings, color: Colors.deepOrange),
               title: Text('Settings'),
               onTap: () {
-                Navigator.pop(context);
+                showComingSoon(context);
               },
             ),
             Divider(),
@@ -213,7 +219,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 onTap: () {
                   Navigator.pushNamed(context, '/adminbatch');
                 },
-                color: Colors.indigoAccent,
+                color: Colors.deepOrange,
                 image: 'assets/images/batchicon.png',
                 text: 'Batch',
               ),
@@ -221,7 +227,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 onTap: () {
                   Navigator.pushNamed(context, '/adminstudents');
                 },
-                color: Colors.teal,
+                color: Colors.lightBlue,
                 image: 'assets/images/studenticon.png',
                 text: 'Student',
               ),
@@ -392,7 +398,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     },
                   );
                 },
-                color: Colors.deepOrangeAccent,
+                color: Colors.purpleAccent,
                 image: 'assets/images/attendanceicon.png',
                 text: 'Attendance',
               ),
@@ -400,7 +406,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 onTap: () {
                   Navigator.pushNamed(context, '/addteacher');
                 },
-                color: Colors.purpleAccent,
+                color: Colors.deepOrange,
                 image: 'assets/images/stafficon.png',
                 text: 'Staff Manager',
               ),
@@ -413,10 +419,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 text: 'Tuition Fees',
               ),
               reuseList(
-                onTap: () {},
-                color: Colors.black54,
-                image: 'assets/images/settingsicon.png',
-                text: 'Settings',
+                onTap: () {
+                  Navigator.pushNamed(context, '/contactsupport');
+                },
+                color: Colors.teal,
+                image: 'assets/images/contactuslogo.png',
+                text: 'Contact Support',
               ),
               const SizedBox(height: 20),
             ],

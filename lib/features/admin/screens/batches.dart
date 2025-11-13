@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:studify/features/admin/screens/homework_history.dart';
 import 'package:studify/provider/admin/features/batch.dart';
 import 'package:studify/provider/admin/profile.dart';
 import 'package:studify/features/admin/screens/studentlist.dart';
@@ -49,6 +50,7 @@ class _BatchesState extends State<Batches> {
 
     return Scaffold(
       appBar: ReuseAppbar(name: 'Batches List'),
+      backgroundColor: Colors.white,
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : provider.batches.isEmpty
@@ -72,6 +74,7 @@ class _BatchesState extends State<Batches> {
                       );
                     },
                     child: Card(
+                      color: Colors.white,
                       elevation: 5,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -100,6 +103,25 @@ class _BatchesState extends State<Batches> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
+                              icon: const Icon(Icons.book, color: Colors.green),
+                              tooltip: 'View Homework',
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        AdminHomeworkListScreen(
+                                          batchId: batch['id'],
+                                          batchName: batch['name'],
+                                          adminId: adminProvider.adminId!,
+                                        ),
+                                  ),
+                                );
+                              },
+                            ),
+
+                            IconButton(
+                              tooltip: 'Edit Batch',
                               icon: const Icon(Icons.edit, color: Colors.blue),
                               onPressed: () async {
                                 _showEditDialog(
@@ -110,7 +132,9 @@ class _BatchesState extends State<Batches> {
                                 );
                               },
                             ),
+
                             IconButton(
+                              tooltip: 'Delete Batch',
                               icon: const Icon(Icons.delete, color: Colors.red),
                               onPressed: () async {
                                 final confirm = await showDialog<bool>(
@@ -215,11 +239,9 @@ class _BatchesState extends State<Batches> {
                   child: const Text('Cancel'),
                 ),
                 ElevatedButton(
-                  // In your Batches screen, update the add batch button:
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       try {
-                        // 🔥 GET ADMIN ID SAFELY
                         final adminProvider = Provider.of<AdminProfileProvider>(
                           context,
                           listen: false,
@@ -251,7 +273,7 @@ class _BatchesState extends State<Batches> {
                           name: nameController.text.trim(),
                           location: locationController.text.trim(),
                           incharge: inchargeController.text.trim(),
-                          adminId: adminProvider.adminId!, // ✅ SAFE NOW
+                          adminId: adminProvider.adminId!,
                         );
 
                         Navigator.pop(context);
@@ -279,7 +301,7 @@ class _BatchesState extends State<Batches> {
     BuildContext context,
     BatchProvider provider,
     Map<String, dynamic> batch,
-    AdminProfileProvider adminProvider, // Add this parameter
+    AdminProfileProvider adminProvider,
   ) {
     TextEditingController nameCtrl = TextEditingController(text: batch['name']);
     TextEditingController locCtrl = TextEditingController(

@@ -30,7 +30,8 @@ class StudentProvider extends ChangeNotifier {
           .select('*, batches(name)')
           .eq('batch_id', batchId)
           .eq('admin_id', adminId);
-      _StudentList = data.map((e) => e as Map<String, dynamic>).toList();
+      _StudentList = List<Map<String, dynamic>>.from(data);
+
       notifyListeners();
     } catch (e) {
       throw Exception('Error fetching students for batch: $e');

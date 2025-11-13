@@ -1,13 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:provider/provider.dart';
 import 'package:studify/provider/homework.dart';
 import 'package:studify/utils/appbar.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
-import 'package:photo_view/photo_view.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
-import 'package:url_launcher/url_launcher.dart';
+import 'package:path_provider/path_provider.dart';
 
 class StudentHomework extends StatefulWidget {
   final String batchId;
@@ -128,125 +126,58 @@ class _StudentHomeworkState extends State<StudentHomework> {
     String filePath,
   ) async {
     try {
-      // 🟢 Get signed URL for private file
-      final provider = context.read<HomeworkProvider>();
-      final signedUrl = await provider.getSignedUrl(filePath);
+      final fileName = filePath.split('/').last;
+      final dir = await getTemporaryDirectory();
+      final localFile = File('${dir.path}/$fileName');
 
-      if (signedUrl == null) {
-        throw Exception('Could not generate access URL');
+      // ✅ 1️⃣ If file already exists locally, open instantly
+      if (await localFile.exists()) {
+        debugPrint('⚡ Opening cached file: ${localFile.path}');
+        await OpenFilex.open(localFile.path);
+        return;
       }
 
-      debugPrint('🔗 Signed URL: $signedUrl');
-
-      final lowerUrl = signedUrl.toLowerCase();
-
-      if (lowerUrl.contains('.pdf')) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => PDFViewerScreen(pdfUrl: signedUrl)),
-        );
-      } else if (lowerUrl.contains('.jpg') ||
-          lowerUrl.contains('.jpeg') ||
-          lowerUrl.contains('.png')) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => ImageViewerScreen(imageUrl: signedUrl),
-          ),
-        );
-      } else {
-        if (await canLaunchUrl(Uri.parse(signedUrl))) {
-          await launchUrl(
-            Uri.parse(signedUrl),
-            mode: LaunchMode.externalApplication,
-          );
-        }
-      }
-    } catch (e) {
-      // Show error message
+      // ✅ 2️⃣ Otherwise, show loading dialog
       showDialog(
         context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('Error Opening File'),
-          content: Text('The file cannot be opened. Error: $e'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
-            ),
-          ],
+        barrierDismissible: false,
+        builder: (_) => const Center(
+          child: CircularProgressIndicator(
+            color: Colors.blueAccent,
+            strokeWidth: 3,
+          ),
         ),
       );
-      debugPrint('❌ Error opening material: $e');
-    }
-  }
-}
 
-class PDFViewerScreen extends StatefulWidget {
-  final String pdfUrl;
-  const PDFViewerScreen({super.key, required this.pdfUrl});
+      // ✅ 3️⃣ Generate signed URL and download file
+      final provider = context.read<HomeworkProvider>();
+      final signedUrl = await provider.getSignedUrl(filePath);
+      if (signedUrl == null) throw Exception('Could not generate signed URL');
 
-  @override
-  State<PDFViewerScreen> createState() => _PDFViewerScreenState();
-}
+      final response = await http.get(Uri.parse(signedUrl));
+      if (response.statusCode != 200) {
+        throw Exception('Failed to download file');
+      }
 
-class _PDFViewerScreenState extends State<PDFViewerScreen> {
-  bool loading = true;
-  String? localPath;
+      // ✅ 4️⃣ Save file locally for next time
+      await localFile.writeAsBytes(response.bodyBytes);
+      debugPrint('📁 File cached at: ${localFile.path}');
 
-  @override
-  void initState() {
-    super.initState();
-    _downloadAndShowPDF();
-  }
+      // ✅ 5️⃣ Close loading dialog
+      Navigator.pop(context);
 
-  Future<void> _downloadAndShowPDF() async {
-    try {
-      final response = await http.get(Uri.parse(widget.pdfUrl));
-      final dir = await getTemporaryDirectory();
-      final file = File('${dir.path}/temp.pdf');
-      await file.writeAsBytes(response.bodyBytes);
-      setState(() {
-        localPath = file.path;
-        loading = false;
-      });
+      // ✅ 6️⃣ Open file instantly
+      final result = await OpenFilex.open(localFile.path);
+      debugPrint('📂 Open result: ${result.message}');
     } catch (e) {
-      debugPrint('Error loading PDF: $e');
-      setState(() => loading = false);
+      Navigator.pop(context); // Close dialog if open
+      debugPrint('❌ Error opening file: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Error opening file: $e'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Preview PDF")),
-      body: loading
-          ? const Center(child: CircularProgressIndicator())
-          : localPath == null
-          ? const Center(child: Text('Failed to load PDF'))
-          : PDFView(
-              filePath: localPath!,
-              enableSwipe: true,
-              swipeHorizontal: false,
-              autoSpacing: true,
-              pageFling: true,
-            ),
-    );
-  }
-}
-
-class ImageViewerScreen extends StatelessWidget {
-  final String imageUrl;
-  const ImageViewerScreen({super.key, required this.imageUrl});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Preview Image')),
-      body: PhotoView(
-        imageProvider: NetworkImage(imageUrl),
-        backgroundDecoration: const BoxDecoration(color: Colors.white),
-      ),
-    );
   }
 }

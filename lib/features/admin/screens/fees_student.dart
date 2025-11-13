@@ -43,6 +43,7 @@ class _TutionFeesState extends State<TutionFees> {
 
     return Scaffold(
       appBar: ReuseAppbar(name: 'Tuition Fees'),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           // Batch Selection
@@ -116,6 +117,7 @@ class _TutionFeesState extends State<TutionFees> {
                   final student = studentProvider.StudentList[index];
 
                   return Card(
+                    color: Colors.white,
                     margin: const EdgeInsets.symmetric(
                       horizontal: 16,
                       vertical: 4,

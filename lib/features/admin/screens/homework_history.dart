@@ -2,90 +2,95 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:studify/provider/homework.dart';
-import 'package:studify/utils/appbar.dart';
 import 'package:http/http.dart' as http;
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:studify/provider/homework.dart';
+import 'package:studify/utils/appbar.dart';
 
-class HomeworkListScreen extends StatefulWidget {
+class AdminHomeworkListScreen extends StatefulWidget {
   final String batchId;
   final String batchName;
   final int adminId;
-  final String teacherId;
 
-  const HomeworkListScreen({
+  const AdminHomeworkListScreen({
     super.key,
     required this.batchId,
     required this.batchName,
     required this.adminId,
-    required this.teacherId,
   });
 
   @override
-  State<HomeworkListScreen> createState() => _HomeworkListScreenState();
+  State<AdminHomeworkListScreen> createState() =>
+      _AdminHomeworkListScreenState();
 }
 
-class _HomeworkListScreenState extends State<HomeworkListScreen> {
+class _AdminHomeworkListScreenState extends State<AdminHomeworkListScreen> {
   File? selectedFile;
   bool isLoading = true;
+  bool isError = false;
+  String? errorMessage;
 
   @override
   void initState() {
     super.initState();
-    _loadHomework();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadHomework();
+    });
   }
 
   Future<void> _loadHomework() async {
-    final provider = context.read<HomeworkProvider>();
-    await provider.fetchHomeworkByBatch(widget.batchId, widget.adminId);
-    setState(() => isLoading = false);
+    if (mounted) {
+      setState(() {
+        isLoading = true;
+        isError = false;
+        errorMessage = null;
+      });
+    }
+
+    try {
+      final provider = context.read<HomeworkProvider>();
+      await provider.fetchHomeworkByBatch(widget.batchId, widget.adminId);
+
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+          isError = true;
+          errorMessage = e.toString();
+        });
+      }
+    }
   }
 
-  String _getFileType(String filePath) {
-    final lowerPath = filePath.toLowerCase();
-    if (lowerPath.endsWith('.pdf')) return 'PDF';
-    if (lowerPath.endsWith('.jpg') ||
-        lowerPath.endsWith('.jpeg') ||
-        lowerPath.endsWith('.png'))
-      return 'Image';
-    if (lowerPath.endsWith('.docx')) return 'Document';
-    if (lowerPath.endsWith('.mp4')) return 'Video';
-    return 'File';
-  }
-
-  /// 🟢 Open Material using native app (works with signed URL)
   Future<void> _openMaterial(String filePath) async {
     try {
       final fileName = filePath.split('/').last;
       final dir = await getTemporaryDirectory();
       final localFile = File('${dir.path}/$fileName');
 
-      // 🟢 Step 1: If file already exists locally, open instantly
       if (await localFile.exists()) {
-        debugPrint('📂 File already cached locally: ${localFile.path}');
         await OpenFilex.open(localFile.path);
         return;
       }
 
-      // 🟢 Step 2: If not cached, download and save
       final provider = context.read<HomeworkProvider>();
       final signedUrl = await provider.getSignedUrl(filePath);
       if (signedUrl == null) throw Exception('Could not generate signed URL');
 
-      debugPrint('🔗 Downloading from signed URL: $signedUrl');
       final response = await http.get(Uri.parse(signedUrl));
       if (response.statusCode != 200) {
         throw Exception('Failed to download file');
       }
 
       await localFile.writeAsBytes(response.bodyBytes);
-      debugPrint('✅ File saved locally: ${localFile.path}');
-
-      // 🟢 Step 3: Open file from cache
       await OpenFilex.open(localFile.path);
     } catch (e) {
-      debugPrint('❌ Error opening file: $e');
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
@@ -102,9 +107,14 @@ class _HomeworkListScreenState extends State<HomeworkListScreen> {
     }
   }
 
-  void _showAddDialog(BuildContext context, HomeworkProvider provider) {
-    final titleCtrl = TextEditingController();
-    final descCtrl = TextEditingController();
+  void _showEditDialog(
+    BuildContext context,
+    HomeworkProvider provider,
+    Map hw,
+  ) {
+    final titleCtrl = TextEditingController(text: hw['title'] ?? '');
+    final descCtrl = TextEditingController(text: hw['description'] ?? '');
+    selectedFile = null;
 
     showDialog(
       context: context,
@@ -116,9 +126,9 @@ class _HomeworkListScreenState extends State<HomeworkListScreen> {
             ),
             title: Row(
               children: const [
-                Icon(Icons.add_circle_outline, color: Colors.blueAccent),
+                Icon(Icons.edit, color: Colors.blueAccent),
                 SizedBox(width: 8),
-                Text('Add Homework'),
+                Text('Edit Homework'),
               ],
             ),
             content: SingleChildScrollView(
@@ -153,7 +163,9 @@ class _HomeworkListScreenState extends State<HomeworkListScreen> {
                     ),
                     icon: const Icon(Icons.attach_file, color: Colors.white),
                     label: Text(
-                      selectedFile == null ? 'Attach Material' : 'Change File',
+                      selectedFile == null
+                          ? 'Change File (Optional)'
+                          : 'Change File',
                       style: const TextStyle(color: Colors.white),
                     ),
                     onPressed: () async {
@@ -197,32 +209,60 @@ class _HomeworkListScreenState extends State<HomeworkListScreen> {
               ElevatedButton.icon(
                 icon: const Icon(Icons.save, color: Colors.white),
                 label: const Text(
-                  'Save',
+                  'Update',
                   style: TextStyle(color: Colors.white),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blueAccent,
                 ),
                 onPressed: () async {
-                  String? uploadedFilePath;
+                  if (titleCtrl.text.trim().isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please enter a title'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return;
+                  }
+
+                  String? uploadedFilePath = hw['material_link'];
+
                   if (selectedFile != null) {
+                    // Ensure teacher_id is passed as UUID string
+                    final teacherId = hw['teacher_id']?.toString() ?? '';
+                    debugPrint('🟡 Uploading file for teacher: $teacherId');
+
                     uploadedFilePath = await provider.uploadMaterial(
                       selectedFile!,
-                      widget.teacherId,
+                      teacherId, // This should be a UUID string
                     );
                   }
 
-                  await provider.addHomework(
+                  final success = await provider.updateHomework(
+                    id: hw['id'].toString(), // Ensure ID is string
                     title: titleCtrl.text.trim(),
                     description: descCtrl.text.trim(),
                     materialLink: uploadedFilePath,
-                    batchId: widget.batchId,
-                    teacherId: widget.teacherId,
-                    adminId: widget.adminId,
                   );
 
-                  Navigator.pop(context);
-                  await _loadHomework();
+                  if (success && mounted) {
+                    Navigator.pop(context);
+                    await _loadHomework();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('✅ Homework updated successfully!'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('❌ Failed to update homework'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
                 },
               ),
             ],
@@ -238,14 +278,38 @@ class _HomeworkListScreenState extends State<HomeworkListScreen> {
 
     return Scaffold(
       appBar: ReuseAppbar(name: '${widget.batchName} Homework'),
-      backgroundColor: Colors.grey[100],
+      backgroundColor: Colors.white,
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
+          : isError
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error, size: 64, color: Colors.red),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Error loading homework',
+                    style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    errorMessage ?? 'Unknown error',
+                    style: TextStyle(fontSize: 14, color: Colors.grey[500]),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _loadHomework,
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            )
           : provider.homeworkList.isEmpty
           ? const Center(
               child: Text(
-                'No homework yet.\nTap + to add one!',
-                textAlign: TextAlign.center,
+                'No homework available.',
                 style: TextStyle(fontSize: 16, color: Colors.black54),
               ),
             )
@@ -259,57 +323,73 @@ class _HomeworkListScreenState extends State<HomeworkListScreen> {
                   return Card(
                     color: Colors.white,
                     margin: const EdgeInsets.symmetric(vertical: 8),
-                    elevation: 4,
+                    elevation: 3,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
+                    child: ListTile(
+                      leading: const CircleAvatar(
+                        backgroundColor: Colors.blueAccent,
+                        child: Icon(Icons.assignment, color: Colors.white),
+                      ),
+                      title: Text(
+                        hw['title'] ?? 'Untitled Homework',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.assignment,
-                                color: Colors.blueAccent,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  hw['title'] ?? 'Untitled Homework',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
                           const SizedBox(height: 6),
                           Text(
                             hw['description'] ?? '',
+                            style: const TextStyle(fontSize: 13),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            '👨‍🏫 Teacher: ${hw['teacher_name'] ?? 'Unknown'}',
                             style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.black87,
+                              color: Colors.blueGrey,
+                              fontSize: 12,
                             ),
                           ),
-                          const SizedBox(height: 8),
+                        ],
+                      ),
+                      trailing: PopupMenuButton<String>(
+                        onSelected: (value) async {
+                          if (value == 'view' && hw['material_link'] != null) {
+                            _openMaterial(hw['material_link']);
+                          } else if (value == 'edit') {
+                            _showEditDialog(context, provider, hw);
+                          }
+                        },
+                        itemBuilder: (context) => [
                           if (hw['material_link'] != null)
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton.icon(
-                                icon: const Icon(
-                                  Icons.remove_red_eye,
-                                  color: Colors.blueAccent,
-                                ),
-                                label: Text(
-                                  'View ${_getFileType(hw['material_link'])}',
-                                ),
-                                onPressed: () =>
-                                    _openMaterial(hw['material_link']),
+                            const PopupMenuItem(
+                              value: 'view',
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.remove_red_eye,
+                                    color: Colors.blueAccent,
+                                  ),
+                                  SizedBox(width: 8),
+                                  Text('View File'),
+                                ],
                               ),
                             ),
+                          const PopupMenuItem(
+                            value: 'edit',
+                            child: Row(
+                              children: [
+                                Icon(Icons.edit, color: Colors.blueAccent),
+                                SizedBox(width: 8),
+                                Text('Edit'),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -317,15 +397,6 @@ class _HomeworkListScreenState extends State<HomeworkListScreen> {
                 },
               ),
             ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.blueAccent,
-        icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text(
-          "Add Homework",
-          style: TextStyle(color: Colors.white),
-        ),
-        onPressed: () => _showAddDialog(context, provider),
-      ),
     );
   }
 }

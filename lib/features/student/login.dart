@@ -12,7 +12,7 @@ class StudentLogin extends StatefulWidget {
 }
 
 class _StudentLoginState extends State<StudentLogin> {
-  TextEditingController namecontroller = TextEditingController();
+  TextEditingController emailcontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -62,10 +62,10 @@ class _StudentLoginState extends State<StudentLogin> {
                 child: Column(
                   children: [
                     ReuseTextfield(
-                      controller: namecontroller,
-                      text: 'Enter Name',
+                      controller: emailcontroller,
+                      text: 'Enter email',
                       validator: (v) => v == null || v.isEmpty
-                          ? 'Please enter your name'
+                          ? 'Please enter your email'
                           : null,
                     ),
                     const SizedBox(height: 16),
@@ -110,7 +110,7 @@ class _StudentLoginState extends State<StudentLogin> {
                                   setState(() => isLoading = true);
                                   final student = await studentProvider
                                       .loginStudent(
-                                        name: namecontroller.text,
+                                        email: emailcontroller.text,
                                         password: passwordcontroller.text,
                                       );
                                   setState(() => isLoading = false);
@@ -133,7 +133,7 @@ class _StudentLoginState extends State<StudentLogin> {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text(
-                                          'Invalid name or password ❌',
+                                          'Invalid email or password ❌',
                                         ),
                                       ),
                                     );

@@ -124,6 +124,14 @@ class _StudentDashboardState extends State<StudentDashboard> {
             ),
             reuseList(
               onTap: () {
+                Navigator.pushNamed(context, '/contactsupport');
+              },
+              color: Colors.green,
+              image: 'assets/images/contactuslogo.png',
+              text: 'Contact Us',
+            ),
+            reuseList(
+              onTap: () {
                 showComingSoon(context);
               },
               color: Colors.blueGrey,

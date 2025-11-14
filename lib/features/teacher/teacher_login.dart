@@ -12,7 +12,7 @@ class TeacherLogin extends StatefulWidget {
 }
 
 class _TeacherLoginState extends State<TeacherLogin> {
-  TextEditingController namecontroller = TextEditingController();
+  TextEditingController emailcontroller = TextEditingController();
   TextEditingController passwordcontroller = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
@@ -56,10 +56,10 @@ class _TeacherLoginState extends State<TeacherLogin> {
                 child: Column(
                   children: [
                     ReuseTextfield(
-                      controller: namecontroller,
-                      text: 'Enter Name',
+                      controller: emailcontroller,
+                      text: 'Enter Email',
                       validator: (v) => v == null || v.isEmpty
-                          ? 'Please enter your name'
+                          ? 'Please enter your email'
                           : null,
                     ),
                     const SizedBox(height: 16),
@@ -103,7 +103,7 @@ class _TeacherLoginState extends State<TeacherLogin> {
                                 if (_formKey.currentState!.validate()) {
                                   setState(() => isLoading = true);
                                   final teachr = await provider.teacherLogin(
-                                    name: namecontroller.text,
+                                    email: emailcontroller.text,
                                     password: passwordcontroller.text,
                                   );
                                   setState(() => isLoading = false);
@@ -126,7 +126,7 @@ class _TeacherLoginState extends State<TeacherLogin> {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content: Text(
-                                          'Invalid name or password ❌',
+                                          'Invalid email or password ❌',
                                         ),
                                       ),
                                     );

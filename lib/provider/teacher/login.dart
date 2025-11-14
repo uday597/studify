@@ -7,14 +7,14 @@ class TeacherLoginProvider extends ChangeNotifier {
   Map<String, dynamic>? get teacherData => _teacherData;
 
   Future<Map<String, dynamic>?> teacherLogin({
-    required String name,
+    required String email,
     required String password,
   }) async {
     try {
       final response = await supabase
           .from('teachers')
           .select()
-          .eq('name', name)
+          .eq('email', email)
           .eq('password', password)
           .maybeSingle();
 

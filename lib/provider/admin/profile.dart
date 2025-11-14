@@ -43,7 +43,7 @@ class AdminProfileProvider extends ChangeNotifier {
         print("✅ Admin data fetched successfully. Admin ID: ${admin!.id}");
       } else {
         print("❌ No admin record found for email: $email");
-        admin = null; // 🔥 IMPORTANT: Reset admin to null if not found
+        admin = null;
       }
     } catch (e) {
       print('❌ Error fetching admin data: $e');
@@ -61,14 +61,12 @@ class AdminProfileProvider extends ChangeNotifier {
     print("🧹 Admin data cleared");
   }
 
-  // Ensure admin data is loaded - IMPROVED VERSION
   Future<void> ensureAdminLoaded() async {
     if (admin == null && !isloading) {
       await Fatchdata();
     }
   }
 
-  // Rest of your code remains same...
   Future<void> updatedata({
     required String name,
     required String academy_name,

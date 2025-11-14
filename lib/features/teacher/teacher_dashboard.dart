@@ -85,7 +85,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               onTap: () {
                 Navigator.pushNamed(context, '/teacheracademyinfo');
               },
-              color: Colors.teal,
+              color: Colors.lightBlue,
               image: 'assets/images/studenticon.png',
               text: 'My Academy',
             ),
@@ -93,7 +93,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               onTap: () {
                 Navigator.pushNamed(context, '/teacher_attendacne_history');
               },
-              color: Colors.lightBlue,
+              color: Colors.teal,
               image: 'assets/images/attendanceicon.png',
               text: 'Attendance',
             ),
@@ -102,9 +102,17 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               onTap: () {
                 Navigator.pushNamed(context, '/teacherbatches');
               },
-              color: Colors.red,
+              color: Colors.purpleAccent,
               image: 'assets/images/feesicon.png',
               text: 'Homework',
+            ),
+            reuseList(
+              onTap: () {
+                Navigator.pushNamed(context, '/contactsupport');
+              },
+              color: Colors.green,
+              image: 'assets/images/contactuslogo.png',
+              text: 'Contact Us',
             ),
             reuseList(
               onTap: () {

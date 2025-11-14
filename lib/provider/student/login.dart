@@ -7,14 +7,14 @@ class StudentLoginProvider extends ChangeNotifier {
   Map<String, dynamic>? get studentData => _studentData;
 
   Future<Map<String, dynamic>?> loginStudent({
-    required String name,
+    required String email,
     required String password,
   }) async {
     try {
       final response = await supabase
           .from('students')
           .select()
-          .eq('name', name)
+          .eq('email', email)
           .eq('password', password)
           .maybeSingle();
 
@@ -31,7 +31,6 @@ class StudentLoginProvider extends ChangeNotifier {
     }
   }
 
-  // 🔥 NEW METHOD: Clear student data on logout
   void logout() {
     _studentData = null;
     notifyListeners();

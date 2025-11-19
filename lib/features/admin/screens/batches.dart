@@ -90,6 +90,8 @@ class _BatchesState extends State<Batches> {
                         ),
                         title: Text(
                           batch['name'],
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 18,
@@ -196,6 +198,7 @@ class _BatchesState extends State<Batches> {
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
+              backgroundColor: Colors.white,
               title: const Center(
                 child: Text(
                   'New Batch',
@@ -280,6 +283,9 @@ class _BatchesState extends State<Batches> {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(content: Text('Batch added successfully')),
                         );
+                        nameController.clear();
+                        locationController.clear();
+                        inchargeController.clear();
                       } catch (e) {
                         ScaffoldMessenger.of(
                           context,

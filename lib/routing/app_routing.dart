@@ -20,6 +20,7 @@ import 'package:studify/features/teacher/screens/academy_info.dart';
 import 'package:studify/features/teacher/screens/attendace_history.dart';
 import 'package:studify/features/teacher/screens/batch_details.dart';
 import 'package:studify/features/teacher/screens/bathces_list.dart';
+import 'package:studify/features/teacher/screens/settings.dart';
 import 'package:studify/features/teacher/teacher_login.dart';
 
 class AppRouting {
@@ -46,5 +47,6 @@ class AppRouting {
     '/batcheslist': (context) => BathcesList(),
     '/contactsupport': (context) => ContactUs(),
     '/notifications': (context) => NotificationScreen(),
+    '/settings': (context) => SettingScreen(),
   };
 }

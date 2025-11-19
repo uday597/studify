@@ -39,7 +39,6 @@ class HomeworkProvider extends ChangeNotifier {
     }
   }
 
-  /// 🟢 Upload file to Private Storage
   Future<bool> updateHomework({
     required String id,
     required String title,
@@ -49,7 +48,6 @@ class HomeworkProvider extends ChangeNotifier {
     try {
       debugPrint('🟡 Updating homework with ID: $id');
 
-      // Prepare update data
       final updateData = {
         'title': title,
         'description': description,
@@ -93,11 +91,14 @@ class HomeworkProvider extends ChangeNotifier {
   }
 
   Future<String?> uploadMaterial(File file, String teacherId) async {
+    if (teacherId.isEmpty) {
+      debugPrint('❌ Teacher ID is empty. Cannot upload file.');
+      return null;
+    }
     try {
       final fileExt = file.path.split('.').last;
       final fileName = '${const Uuid().v4()}.$fileExt';
 
-      // Use UUID directly in file path
       final filePath = '$teacherId/$fileName';
 
       await supabase.storage.from('homework').upload(filePath, file);
@@ -120,6 +121,34 @@ class HomeworkProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('❌ Error generating signed URL: $e');
       return null;
+    }
+  }
+
+  Future<bool> deleteHomework(
+    String id,
+    String? materialLink,
+    String batchId,
+    int adminId,
+  ) async {
+    try {
+      debugPrint("🗑 Deleting homework with ID: $id");
+
+      // Delete attached file first (not required if null)
+      if (materialLink != null && materialLink.isNotEmpty) {
+        await supabase.storage.from('homework').remove([materialLink]);
+        debugPrint("🗑 File removed from storage: $materialLink");
+      }
+
+      // Delete row from database
+      await supabase.from('homework').delete().eq('id', id);
+
+      // Refresh list
+      await fetchHomeworkByBatch(batchId, adminId);
+
+      return true;
+    } catch (e) {
+      debugPrint("❌ Error deleting homework: $e");
+      return false;
     }
   }
 

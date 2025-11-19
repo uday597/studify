@@ -22,7 +22,6 @@ class TeacherLoginProvider extends ChangeNotifier {
         return null;
       }
 
-      // Store teacher data
       _teacherData = response;
       notifyListeners();
 

@@ -17,12 +17,12 @@ class _TeacherProfile2State extends State<TeacherProfile2> {
 
     return Scaffold(
       appBar: ReuseAppbar(name: 'Student Profile'),
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
             const SizedBox(height: 20),
 
-            // 🧑‍🎓 Student Logo
             Center(
               child: CircleAvatar(
                 radius: 55,
@@ -48,6 +48,7 @@ class _TeacherProfile2State extends State<TeacherProfile2> {
 
             // 📝 Student Info
             Card(
+              color: Colors.white,
               margin: const EdgeInsets.all(12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15),

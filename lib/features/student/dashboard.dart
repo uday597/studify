@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:studify/features/student/features/homework.dart';
 import 'package:studify/features/student/studentoprofile.dart';
 import 'package:studify/utils/appbar.dart';
-import 'package:studify/utils/coming_soon.dart';
 import 'package:studify/utils/reuselist.dart';
 
 class StudentDashboard extends StatefulWidget {
@@ -78,7 +77,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
               onTap: () {
                 Navigator.pushNamed(context, '/batchinfo');
               },
-              color: Colors.deepOrange,
               image: 'assets/images/batchicon.png',
               text: 'Batch Details',
             ),
@@ -86,7 +84,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
               onTap: () {
                 Navigator.pushNamed(context, '/academyinfo');
               },
-              color: Colors.teal,
               image: 'assets/images/studenticon.png',
               text: 'My Academy',
             ),
@@ -94,7 +91,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
               onTap: () {
                 Navigator.pushNamed(context, '/studentattendancehistory');
               },
-              color: Colors.lightBlue,
               image: 'assets/images/attendanceicon.png',
               text: 'Attendance',
             ),
@@ -102,7 +98,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
               onTap: () {
                 Navigator.pushNamed(context, '/feeshistory');
               },
-              color: Colors.purpleAccent,
               image: 'assets/images/stafficon.png',
               text: 'Tution Fees',
             ),
@@ -118,7 +113,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
                   ),
                 );
               },
-              color: Colors.redAccent,
               image: 'assets/images/feesicon.png',
               text: 'Homework',
             ),
@@ -126,15 +120,13 @@ class _StudentDashboardState extends State<StudentDashboard> {
               onTap: () {
                 Navigator.pushNamed(context, '/contactsupport');
               },
-              color: Colors.green,
               image: 'assets/images/contactuslogo.png',
               text: 'Contact Us',
             ),
             reuseList(
               onTap: () {
-                showComingSoon(context);
+                Navigator.pushNamed(context, '/settings');
               },
-              color: Colors.blueGrey,
               image: 'assets/images/settingsicon.png',
               text: 'Settings',
             ),

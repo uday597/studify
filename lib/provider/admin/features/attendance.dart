@@ -17,7 +17,7 @@ class AttendanceProvider extends ChangeNotifier {
 
       final date = DateTime.now().toIso8601String().split('T')[0];
 
-      // Check if attendance already exists
+      
       final existingRecord = await supabase
           .from('teacher_attendance')
           .select()
@@ -27,7 +27,6 @@ class AttendanceProvider extends ChangeNotifier {
           .maybeSingle();
 
       if (existingRecord != null) {
-        // UPDATE existing record
         await supabase
             .from('teacher_attendance')
             .update({
@@ -37,7 +36,6 @@ class AttendanceProvider extends ChangeNotifier {
             .eq('id', existingRecord['id']);
         debugPrint('✅ UPDATED attendance for teacher: $teacherId');
       } else {
-        // INSERT new record
         await supabase.from('teacher_attendance').insert({
           'teacher_id': teacherId,
           'status': status,
@@ -79,7 +77,6 @@ class AttendanceProvider extends ChangeNotifier {
           .maybeSingle();
 
       if (existingRecord != null) {
-        // UPDATE existing record
         await supabase
             .from('student_attendance')
             .update({
@@ -90,7 +87,7 @@ class AttendanceProvider extends ChangeNotifier {
             .eq('id', existingRecord['id']);
         debugPrint('✅ UPDATED attendance for student: $studentId');
       } else {
-        // INSERT new record
+        
         await supabase.from('student_attendance').insert({
           'student_id': studentId,
           'batch_id': batchId,
@@ -127,7 +124,6 @@ class AttendanceProvider extends ChangeNotifier {
     }
   }
 
-  // Rest of your methods remain same...
   Future<List<Map<String, dynamic>>> getTeacherAttendance({
     required int adminId,
     DateTime? date,

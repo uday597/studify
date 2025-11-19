@@ -33,7 +33,9 @@ class _HomeworkListScreenState extends State<HomeworkListScreen> {
   @override
   void initState() {
     super.initState();
-    _loadHomework();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadHomework();
+    });
   }
 
   Future<void> _loadHomework() async {
@@ -54,21 +56,18 @@ class _HomeworkListScreenState extends State<HomeworkListScreen> {
     return 'File';
   }
 
-  /// 🟢 Open Material using native app (works with signed URL)
   Future<void> _openMaterial(String filePath) async {
     try {
       final fileName = filePath.split('/').last;
       final dir = await getTemporaryDirectory();
       final localFile = File('${dir.path}/$fileName');
 
-      // 🟢 Step 1: If file already exists locally, open instantly
       if (await localFile.exists()) {
         debugPrint('📂 File already cached locally: ${localFile.path}');
         await OpenFilex.open(localFile.path);
         return;
       }
 
-      // 🟢 Step 2: If not cached, download and save
       final provider = context.read<HomeworkProvider>();
       final signedUrl = await provider.getSignedUrl(filePath);
       if (signedUrl == null) throw Exception('Could not generate signed URL');
@@ -82,7 +81,6 @@ class _HomeworkListScreenState extends State<HomeworkListScreen> {
       await localFile.writeAsBytes(response.bodyBytes);
       debugPrint('✅ File saved locally: ${localFile.path}');
 
-      // 🟢 Step 3: Open file from cache
       await OpenFilex.open(localFile.path);
     } catch (e) {
       debugPrint('❌ Error opening file: $e');
@@ -103,6 +101,7 @@ class _HomeworkListScreenState extends State<HomeworkListScreen> {
   }
 
   void _showAddDialog(BuildContext context, HomeworkProvider provider) {
+    selectedFile = null;
     final titleCtrl = TextEditingController();
     final descCtrl = TextEditingController();
 
@@ -220,7 +219,7 @@ class _HomeworkListScreenState extends State<HomeworkListScreen> {
                     teacherId: widget.teacherId,
                     adminId: widget.adminId,
                   );
-
+                  selectedFile = null;
                   Navigator.pop(context);
                   await _loadHomework();
                 },
@@ -256,61 +255,138 @@ class _HomeworkListScreenState extends State<HomeworkListScreen> {
                 itemCount: provider.homeworkList.length,
                 itemBuilder: (context, i) {
                   final hw = provider.homeworkList[i];
-                  return Card(
-                    color: Colors.white,
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
+                  return Container(
+                    margin: const EdgeInsets.only(bottom: 14),
+                    child: Material(
+                      color: Colors.white,
+                      elevation: 3,
                       borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              const Icon(
-                                Icons.assignment,
-                                color: Colors.blueAccent,
-                              ),
-                              const SizedBox(width: 8),
-                              Expanded(
-                                child: Text(
-                                  hw['title'] ?? 'Untitled Homework',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 14,
+                          horizontal: 16,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            /// HEADER ROW
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue.shade50,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.assignment,
+                                    color: Colors.blueAccent,
+                                    size: 22,
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            hw['description'] ?? '',
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          if (hw['material_link'] != null)
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton.icon(
-                                icon: const Icon(
-                                  Icons.remove_red_eye,
-                                  color: Colors.blueAccent,
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Text(
+                                    hw["title"] ?? "Untitled Homework",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: .3,
+                                    ),
+                                  ),
                                 ),
-                                label: Text(
-                                  'View ${_getFileType(hw['material_link'])}',
-                                ),
-                                onPressed: () =>
-                                    _openMaterial(hw['material_link']),
+                              ],
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            /// DESCRIPTION
+                            Text(
+                              hw["description"] ?? "",
+                              style: const TextStyle(
+                                fontSize: 15,
+                                height: 1.4,
+                                color: Colors.black87,
                               ),
                             ),
-                        ],
+
+                            const SizedBox(height: 12),
+
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                if (hw["material_link"] != null)
+                                  TextButton.icon(
+                                    style: TextButton.styleFrom(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 12,
+                                        vertical: 6,
+                                      ),
+                                    ),
+                                    icon: const Icon(
+                                      Icons.remove_red_eye,
+                                      color: Colors.blueAccent,
+                                      size: 20,
+                                    ),
+                                    label: Text(
+                                      "View ${_getFileType(hw["material_link"])}",
+                                      style: const TextStyle(fontSize: 14),
+                                    ),
+                                    onPressed: () =>
+                                        _openMaterial(hw["material_link"]),
+                                  ),
+
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.delete,
+                                    color: Colors.red,
+                                    size: 24,
+                                  ),
+                                  onPressed: () async {
+                                    final confirm = await showDialog(
+                                      context: context,
+                                      builder: (_) => AlertDialog(
+                                        title: const Text("Delete Homework"),
+                                        content: const Text(
+                                          "Are you sure you want to delete this homework?",
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context, false),
+                                            child: const Text("Cancel"),
+                                          ),
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context, true),
+                                            child: const Text(
+                                              "Delete",
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+
+                                    if (confirm == true) {
+                                      await provider.deleteHomework(
+                                        hw["id"].toString(),
+                                        hw["material_link"],
+                                        widget.batchId,
+                                        widget.adminId,
+                                      );
+                                    }
+                                  },
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );

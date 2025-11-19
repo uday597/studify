@@ -1,51 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:studify/features/teacher/screens/student_profile.dart';
 import 'package:studify/provider/admin/features/student.dart';
-import 'package:studify/provider/admin/profile.dart';
-import 'package:studify/features/admin/screens/studentprofile.dart';
+import 'package:studify/provider/teacher/login.dart';
 import 'package:studify/utils/appbar.dart';
 
-class StudentListScreen extends StatefulWidget {
+class BatchStudentList extends StatefulWidget {
   final String batchId;
   final String batchName;
 
-  const StudentListScreen({
+  const BatchStudentList({
     super.key,
     required this.batchId,
     required this.batchName,
   });
 
   @override
-  State<StudentListScreen> createState() => _StudentListScreenState();
+  State<BatchStudentList> createState() => _BatchStudentListState();
 }
 
-class _StudentListScreenState extends State<StudentListScreen> {
+class _BatchStudentListState extends State<BatchStudentList> {
   bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    fetchStudents();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      fetchStudents();
+    });
   }
 
   Future<void> fetchStudents() async {
-    final adminProvider = Provider.of<AdminProfileProvider>(
+    final teacherData = Provider.of<TeacherLoginProvider>(
       context,
       listen: false,
-    );
+    ).teacherData;
+    if (teacherData == null || teacherData['admin_id'] == null) return;
+
     final studentProvider = Provider.of<StudentProvider>(
       context,
       listen: false,
     );
 
-    await adminProvider.ensureAdminLoaded();
+    setState(() => _isLoading = true);
 
-    if (adminProvider.adminId != null) {
-      await studentProvider.fetchStudentsByBatch(
-        widget.batchId,
-        adminProvider.adminId!,
-      );
-    }
+    await studentProvider.fetchStudentsByBatch(
+      widget.batchId,
+      teacherData['admin_id'],
+    );
+
     setState(() => _isLoading = false);
   }
 
@@ -82,11 +85,9 @@ class _StudentListScreenState extends State<StudentListScreen> {
                       ),
                     ),
                   ),
-
                   Expanded(
                     child: ListView.builder(
                       itemCount: students.length,
-
                       itemBuilder: (context, index) {
                         final student = students[index];
                         return Card(
@@ -129,16 +130,15 @@ class _StudentListScreenState extends State<StudentListScreen> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>
-                                      StudentProfile(studentData: student),
+                                  builder: (context) => TeacherStudentProfile(
+                                    studentData: student,
+                                  ),
                                 ),
                               );
                             },
                           ),
                         );
                       },
-
-                      // Add these helper methods to StudentListScreen
                     ),
                   ),
                 ],
@@ -148,8 +148,9 @@ class _StudentListScreenState extends State<StudentListScreen> {
   }
 }
 
+// Helper methods
 String _getSafeString(dynamic value) {
-  if (value == null) return 'Not provided';
+  if (value == null || value.toString().isEmpty) return 'Not provided';
   return value.toString();
 }
 

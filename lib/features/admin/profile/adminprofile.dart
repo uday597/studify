@@ -45,7 +45,7 @@ class _AdminprofileState extends State<Adminprofile> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.blue.shade50,
+      backgroundColor: Colors.white,
       appBar: ReuseAppbar(name: 'Admin Profile'),
       body: provider.isloading
           ? const Center(child: CircularProgressIndicator())
@@ -54,153 +54,164 @@ class _AdminprofileState extends State<Adminprofile> {
           : SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Center(
-                child: Container(
-                  constraints: const BoxConstraints(maxWidth: 600),
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.blue.withOpacity(0.2),
-                        blurRadius: 15,
-                        offset: const Offset(0, 6),
+                child: Column(
+                  children: [
+                    Container(
+                      constraints: const BoxConstraints(maxWidth: 600),
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black54.withOpacity(0.2),
+                            blurRadius: 15,
+                            offset: const Offset(0, 6),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        radius: size.width * 0.15,
-                        backgroundColor: Colors.blue.shade100,
-                        backgroundImage: image != null
-                            ? NetworkImage(image!)
-                            : null,
-                        child: image == null
-                            ? const Icon(
-                                Icons.person,
-                                size: 80,
-                                color: Colors.white,
-                              )
-                            : null,
-                      ),
-                      const SizedBox(height: 20),
-
-                      buildTextField(
-                        controller: nameController,
-                        label: 'Full Name',
-                        enabled: isEditing,
-                        icon: Icons.person,
-                      ),
-
-                      buildTextField(
-                        controller: TextEditingController(
-                          text: provider.admin!.email,
-                        ),
-                        label: 'Email Address',
-                        enabled: false,
-                        icon: Icons.email,
-                      ),
-
-                      buildTextField(
-                        controller: academyController,
-                        label: 'Academy Name',
-                        enabled: isEditing,
-                        icon: Icons.school,
-                      ),
-
-                      buildTextField(
-                        controller: mobileController,
-                        label: 'Mobile Number',
-                        enabled: isEditing,
-                        icon: Icons.phone,
-                      ),
-
-                      buildTextField(
-                        controller: addressController,
-                        label: 'Address',
-                        enabled: isEditing,
-                        icon: Icons.location_on,
-                      ),
-
-                      const SizedBox(height: 25),
-
-                      provider.isupdating
-                          ? const CircularProgressIndicator()
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                ElevatedButton.icon(
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: isEditing
-                                        ? Colors.red
-                                        : Colors.blue,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 24,
-                                      vertical: 12,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      isEditing = !isEditing;
-                                    });
-                                  },
-                                  icon: Icon(
-                                    isEditing ? Icons.cancel : Icons.edit,
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: size.width * 0.15,
+                            backgroundColor: Colors.blue.shade100,
+                            backgroundImage: image != null
+                                ? NetworkImage(image!)
+                                : null,
+                            child: image == null
+                                ? const Icon(
+                                    Icons.person,
+                                    size: 80,
                                     color: Colors.white,
-                                  ),
-                                  label: Text(
-                                    isEditing ? "Cancel" : "Edit",
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                if (isEditing)
-                                  ElevatedButton.icon(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.green,
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 24,
-                                        vertical: 12,
-                                      ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                    ),
-                                    onPressed: () async {
-                                      await provider.updatedata(
-                                        name: nameController.text,
-                                        academy_name: academyController.text,
-                                        mobile: mobileController.text,
-                                        address: addressController.text,
-                                      );
-                                      setState(() {
-                                        isEditing = false;
-                                      });
-                                    },
-                                    icon: const Icon(
-                                      Icons.save,
-                                      color: Colors.white,
-                                    ),
-                                    label: const Text(
-                                      "Save",
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                              ],
+                                  )
+                                : null,
+                          ),
+                          const SizedBox(height: 20),
+
+                          buildTextField(
+                            controller: nameController,
+                            label: 'Full Name',
+                            enabled: isEditing,
+                            icon: Icons.person,
+                          ),
+
+                          buildTextField(
+                            controller: TextEditingController(
+                              text: provider.admin!.email,
                             ),
-                    ],
-                  ),
+                            label: 'Email Address',
+                            enabled: false,
+                            icon: Icons.email,
+                          ),
+
+                          buildTextField(
+                            controller: academyController,
+                            label: 'Academy Name',
+                            enabled: isEditing,
+                            icon: Icons.school,
+                          ),
+
+                          buildTextField(
+                            controller: mobileController,
+                            label: 'Mobile Number',
+                            enabled: isEditing,
+                            icon: Icons.phone,
+                          ),
+
+                          buildTextField(
+                            controller: addressController,
+                            label: 'Address',
+                            enabled: isEditing,
+                            icon: Icons.location_on,
+                          ),
+
+                          const SizedBox(height: 25),
+
+                          provider.isupdating
+                              ? const CircularProgressIndicator()
+                              : Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    ElevatedButton.icon(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: isEditing
+                                            ? Colors.red
+                                            : Colors.blue,
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 24,
+                                          vertical: 12,
+                                        ),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            12,
+                                          ),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          isEditing = !isEditing;
+                                        });
+                                      },
+                                      icon: Icon(
+                                        isEditing ? Icons.cancel : Icons.edit,
+                                        color: Colors.white,
+                                      ),
+                                      label: Text(
+                                        isEditing ? "Cancel" : "Edit",
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                    if (isEditing)
+                                      ElevatedButton.icon(
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.green,
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 24,
+                                            vertical: 12,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                          ),
+                                        ),
+                                        onPressed: () async {
+                                          await provider.updatedata(
+                                            name: nameController.text,
+                                            academy_name:
+                                                academyController.text,
+                                            mobile: mobileController.text,
+                                            address: addressController.text,
+                                          );
+                                          setState(() {
+                                            isEditing = false;
+                                          });
+                                        },
+                                        icon: const Icon(
+                                          Icons.save,
+                                          color: Colors.white,
+                                        ),
+                                        label: const Text(
+                                          "Save",
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                  ],
                 ),
               ),
             ),

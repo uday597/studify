@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -28,7 +27,7 @@ class _SplashscreenState extends State<Splashscreen>
     );
     _fadeController.forward();
 
-    Timer(const Duration(seconds: 4), () {
+    Timer(const Duration(seconds: 5), () {
       Navigator.pushReplacementNamed(context, '/rolescreen');
     });
   }
@@ -49,7 +48,7 @@ class _SplashscreenState extends State<Splashscreen>
         height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF0077B6), Color(0xFF00B4D8), Color(0xFF90E0EF)],
+            colors: [Colors.black, Colors.blue],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -59,44 +58,33 @@ class _SplashscreenState extends State<Splashscreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Lottie.asset(
-                'assets/images/spscreenlogo.json',
-                height: size.height * 0.35,
-                width: size.width * 0.7,
-              ),
-
-              const SizedBox(height: 30),
-
-              Text(
-                'Studify',
-                style: TextStyle(
-                  fontSize: size.width * 0.1,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 3,
+              Container(
+                padding: EdgeInsets.all(size.width * 0.015),
+                decoration: BoxDecoration(
                   color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      blurRadius: 10,
-                      color: Colors.black.withOpacity(0.4),
-                      offset: const Offset(2, 2),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: Colors.white, width: 4),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 15,
+                      spreadRadius: 2,
+                      offset: const Offset(0, 6),
                     ),
                   ],
                 ),
-              ),
-
-              const SizedBox(height: 10),
-
-              Text(
-                'Empowering Students, Simplifying Academics',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: size.width * 0.045,
-                  color: Colors.white.withOpacity(0.9),
-                  fontStyle: FontStyle.italic,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.asset(
+                    'assets/images/splashicon.gif',
+                    height: size.height * 0.26,
+                    width: size.width * 0.54,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
 
-              const SizedBox(height: 50),
+              const SizedBox(height: 60),
 
               const CircularProgressIndicator(
                 color: Colors.white,

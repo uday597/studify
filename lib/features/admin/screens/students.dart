@@ -21,6 +21,9 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
   final TextEditingController mobileController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
+  final TextEditingController locationcontroller = TextEditingController();
+  final TextEditingController inchargecontroller = TextEditingController();
+  final TextEditingController batchController = TextEditingController();
 
   String gender = "Male";
   String? selectedBatchId;
@@ -77,6 +80,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                     v == null || v.isEmpty ? 'Enter father name' : null,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text("Gender: "),
                   Radio<String>(
@@ -106,6 +110,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                     v == null || v.isEmpty ? 'Enter password' : null,
               ),
               ReuseTextfield(
+                keyboardType: TextInputType.phone,
                 controller: mobileController,
                 text: 'Mobile Number',
               ),
@@ -114,26 +119,92 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
 
               const SizedBox(height: 12),
 
-              DropdownButtonFormField<String>(
-                decoration: const InputDecoration(labelText: 'Select Batch'),
-                value: selectedBatchId,
-                items: batchProvider.batches.map((batch) {
-                  return DropdownMenuItem<String>(
-                    value: batch['id'],
-                    child: Text(batch['name']),
-                  );
-                }).toList(),
-                onChanged: (val) => setState(() => selectedBatchId = val),
-                validator: (v) =>
-                    v == null || v.isEmpty ? 'Please select a batch' : null,
-              ),
+              batchProvider.batches.isEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "No batches available",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            const Text(
+                              "Please add a new batch to continue.",
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                onPressed: () => _showAddBatchPopup(context),
+                                icon: const Icon(Icons.add),
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 14,
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                label: const Text(
+                                  "Add New Batch",
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: DropdownButtonFormField<String>(
+                        decoration: InputDecoration(
+                          labelText: 'Select Batch',
+                          labelStyle: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey.shade100,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        value: selectedBatchId,
+                        items: batchProvider.batches.map((batch) {
+                          return DropdownMenuItem<String>(
+                            value: batch['id'],
+                            child: Text(batch['name']),
+                          );
+                        }).toList(),
+                        onChanged: (val) =>
+                            setState(() => selectedBatchId = val),
+                        validator: (v) => v == null || v.isEmpty
+                            ? 'Please select a batch'
+                            : null,
+                      ),
+                    ),
 
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     try {
-                      // 🔥 GET ADMIN ID SAFELY
                       final adminProvider = Provider.of<AdminProfileProvider>(
                         context,
                         listen: false,
@@ -175,6 +246,116 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void _showAddBatchPopup(BuildContext context) {
+    final provider = Provider.of<BatchProvider>(context, listen: false);
+    final adminProvider = Provider.of<AdminProfileProvider>(
+      context,
+      listen: false,
+    );
+
+    final _batchFormKey = GlobalKey<FormState>();
+
+    final TextEditingController nameController = TextEditingController();
+    final TextEditingController locationController = TextEditingController();
+    final TextEditingController inchargeController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        title: const Center(
+          child: Text(
+            'New Batch',
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
+        ),
+        content: Form(
+          key: _batchFormKey,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ReuseTextfield(
+                  controller: nameController,
+                  text: 'Batch Name',
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Please enter batch name' : null,
+                ),
+                ReuseTextfield(
+                  controller: locationController,
+                  text: 'Batch Location',
+                  validator: (v) =>
+                      v == null || v.isEmpty ? 'Please enter location' : null,
+                ),
+                ReuseTextfield(
+                  controller: inchargeController,
+                  text: 'Incharge Name',
+                  validator: (v) => v == null || v.isEmpty
+                      ? 'Please enter incharge name'
+                      : null,
+                ),
+              ],
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () async {
+              if (_batchFormKey.currentState!.validate()) {
+                try {
+                  await adminProvider.ensureAdminLoaded();
+
+                  if (adminProvider.adminId == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Admin not logged in properly')),
+                    );
+                    return;
+                  }
+
+                  bool exists = await provider.checkBatchExists(
+                    nameController.text.trim(),
+                    adminProvider.adminId!,
+                  );
+
+                  if (exists) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Batch already exists')),
+                    );
+                    return;
+                  }
+
+                  await provider.addBatch(
+                    name: nameController.text.trim(),
+                    location: locationController.text.trim(),
+                    incharge: inchargeController.text.trim(),
+                    adminId: adminProvider.adminId!,
+                  );
+
+                  Navigator.pop(context);
+
+                  setState(() {});
+
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Batch added successfully')),
+                  );
+                } catch (e) {
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text('Error: $e')));
+                }
+              }
+            },
+            child: const Text('Save'),
+          ),
+        ],
       ),
     );
   }

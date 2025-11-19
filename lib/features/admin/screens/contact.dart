@@ -46,13 +46,23 @@ class _ContactUsState extends State<ContactUs> {
     }
   }
 
-  // Launch website
-  Future<void> _launchWebsite() async {
-    final Uri site = Uri.parse('https://github.com/uday597');
+  Future<void> _launchlinkdin() async {
+    final Uri site = Uri.parse('https://www.linkedin.com/in/uday-256b15342/');
     await launchUrl(site, mode: LaunchMode.externalApplication);
   }
 
-  // Launch phone call
+  Future<void> _launchFB() async {
+    final Uri site = Uri.parse('https://www.facebook.com/uday.kabir.2025');
+    await launchUrl(site, mode: LaunchMode.externalApplication);
+  }
+
+  Future<void> _launchInsta() async {
+    final Uri site = Uri.parse(
+      'https://www.instagram.com/uday_kabir/reels/?__d=1',
+    );
+    await launchUrl(site, mode: LaunchMode.externalApplication);
+  }
+
   Future<void> _launchCall() async {
     final Uri call = Uri(scheme: 'tel', path: '+917404590460');
     await launchUrl(call, mode: LaunchMode.externalApplication);
@@ -109,7 +119,7 @@ class _ContactUsState extends State<ContactUs> {
               label: const Text('Chat on WhatsApp'),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
-                backgroundColor: Colors.green,
+                backgroundColor: Colors.blueAccent,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -125,7 +135,7 @@ class _ContactUsState extends State<ContactUs> {
               label: const Text('Call Us'),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
-                backgroundColor: Colors.orange,
+                backgroundColor: Colors.blueAccent,
                 foregroundColor: Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -137,7 +147,6 @@ class _ContactUsState extends State<ContactUs> {
             const Divider(),
             const SizedBox(height: 10),
 
-            // Office Info Card
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -153,7 +162,7 @@ class _ContactUsState extends State<ContactUs> {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 8),
-                  Text('Studify Academy\nIndore, Madhya Pradesh, India'),
+                  Text('KabirTech\nHaryana, Ambala-Cantt, India'),
                   SizedBox(height: 16),
                   Text(
                     '🕒 Working Hours',
@@ -167,7 +176,6 @@ class _ContactUsState extends State<ContactUs> {
 
             const SizedBox(height: 30),
 
-            // Social Links
             const Text(
               'Follow Us',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -176,17 +184,37 @@ class _ContactUsState extends State<ContactUs> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                IconButton(
-                  icon: const Icon(Icons.web, color: Colors.blueAccent),
-                  onPressed: _launchWebsite,
+                GestureDetector(
+                  onTap: _launchFB,
+                  child: Image.asset(
+                    'assets/images/fblogo.webp',
+                    width: 40,
+                    height: 40,
+                  ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.facebook, color: Colors.blue),
-                  onPressed: () {},
+                const SizedBox(width: 20),
+
+                GestureDetector(
+                  onTap: () {
+                    _launchInsta();
+                  },
+                  child: Image.asset(
+                    'assets/images/instalogo.png',
+                    width: 40,
+                    height: 40,
+                  ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.linked_camera, color: Colors.pink),
-                  onPressed: () {},
+                const SizedBox(width: 20),
+
+                GestureDetector(
+                  onTap: () {
+                    _launchlinkdin();
+                  },
+                  child: Image.asset(
+                    'assets/images/linkdinlogo.png',
+                    width: 40,
+                    height: 40,
+                  ),
                 ),
               ],
             ),

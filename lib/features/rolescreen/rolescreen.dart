@@ -13,17 +13,8 @@ class _RoleScreenState extends State<RoleScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: const Color(0xFF2196F3),
-      appBar: AppBar(
-        elevation: 3,
-        backgroundColor: const Color(0xFF1976D2),
-        foregroundColor: Colors.white,
-        title: const Text(
-          'Select an Option',
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-      ),
+      backgroundColor: Colors.blueAccent,
+
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
@@ -32,8 +23,10 @@ class _RoleScreenState extends State<RoleScreen> {
             vertical: size.height * 0.04,
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              SizedBox(height: 40),
               RoleCard(
                 onTap: () => Navigator.pushNamed(context, '/adminlogin'),
                 image: 'assets/images/adminlogo.png',

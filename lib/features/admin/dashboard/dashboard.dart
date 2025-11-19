@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:studify/main.dart';
 import 'package:studify/features/admin/screens/staff_attendance.dart';
 import 'package:studify/features/admin/screens/student_attendance.dart';
-import 'package:studify/utils/coming_soon.dart';
 import 'package:studify/utils/reuselist.dart';
 
 class AdminDashboard extends StatefulWidget {
@@ -120,7 +119,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               leading: Icon(Icons.settings, color: Colors.deepOrange),
               title: Text('Settings'),
               onTap: () {
-                showComingSoon(context);
+                Navigator.pushNamed(context, '/settings');
               },
             ),
             Divider(),
@@ -129,7 +128,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
               title: Text('Logout'),
               onTap: () async {
                 await supabase.auth.signOut();
-                Navigator.pushReplacementNamed(context, '/adminlogin');
+                Navigator.pushReplacementNamed(context, '/rolescreen');
               },
             ),
           ],
@@ -219,7 +218,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 onTap: () {
                   Navigator.pushNamed(context, '/adminbatch');
                 },
-                color: Colors.deepOrange,
                 image: 'assets/images/batchicon.png',
                 text: 'Batch',
               ),
@@ -227,7 +225,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 onTap: () {
                   Navigator.pushNamed(context, '/adminstudents');
                 },
-                color: Colors.lightBlue,
                 image: 'assets/images/studenticon.png',
                 text: 'Student',
               ),
@@ -275,7 +272,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  // 🧑‍🎓 Student Attendance Button
                                   ElevatedButton.icon(
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.indigo,
@@ -398,7 +394,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     },
                   );
                 },
-                color: Colors.purpleAccent,
                 image: 'assets/images/attendanceicon.png',
                 text: 'Attendance',
               ),
@@ -406,7 +401,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 onTap: () {
                   Navigator.pushNamed(context, '/addteacher');
                 },
-                color: Colors.deepOrange,
                 image: 'assets/images/stafficon.png',
                 text: 'Staff Manager',
               ),
@@ -414,7 +408,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 onTap: () {
                   Navigator.pushNamed(context, '/tutionfees');
                 },
-                color: Colors.blueGrey,
                 image: 'assets/images/feesicon.png',
                 text: 'Tuition Fees',
               ),
@@ -422,7 +415,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 onTap: () {
                   Navigator.pushNamed(context, '/contactsupport');
                 },
-                color: Colors.teal,
                 image: 'assets/images/contactuslogo.png',
                 text: 'Contact Support',
               ),

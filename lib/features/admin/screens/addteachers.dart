@@ -25,7 +25,6 @@ class _AddTeachersState extends State<AddTeachers> {
   String gender = "Male";
 
   @override
-  @override
   void initState() {
     super.initState();
     Future.microtask(() {

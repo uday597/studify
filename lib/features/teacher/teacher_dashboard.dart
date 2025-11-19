@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studify/features/teacher/teacher_profile.dart';
 import 'package:studify/utils/appbar.dart';
-import 'package:studify/utils/coming_soon.dart';
 import 'package:studify/utils/reuselist.dart';
 
 class TeacherDashboard extends StatefulWidget {
@@ -35,37 +34,117 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                 },
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(20),
                     boxShadow: const [
                       BoxShadow(
-                        blurRadius: 6,
-                        color: Color.fromARGB(100, 0, 0, 0),
+                        color: Colors.black26,
+                        blurRadius: 8,
                         offset: Offset(2, 4),
                       ),
                     ],
                   ),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const CircleAvatar(
-                        radius: 35,
+                        radius: 40,
                         backgroundImage: AssetImage(
                           'assets/images/stulogo.png',
                         ),
                       ),
-                      const SizedBox(width: 12),
+
+                      const SizedBox(width: 16),
+
+                      // DETAILS AREA
                       Expanded(
-                        child: Text(
-                          'Welcome ${widget.teacherData['name']}',
-                          style: TextStyle(
-                            color: Colors.deepPurple,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 2,
-                          ),
-                          overflow: TextOverflow.ellipsis,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // NAME
+                            Text(
+                              'Welcome ${widget.teacherData['name']}',
+                              style: const TextStyle(
+                                color: Colors.deepPurple,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+
+                            const SizedBox(height: 10),
+
+                            // EMAIL
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.email,
+                                  size: 18,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 6),
+                                Expanded(
+                                  child: Text(
+                                    widget.teacherData['email'] ?? 'No email',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black87,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 6),
+
+                            // PHONE
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.phone,
+                                  size: 18,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  widget.teacherData['mobile'] ?? 'No phone',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 6),
+
+                            // LOCATION
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.location_on,
+                                  size: 18,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 6),
+                                Expanded(
+                                  child: Text(
+                                    widget.teacherData['location'] ??
+                                        'No location',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black87,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -77,7 +156,6 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               onTap: () {
                 Navigator.pushNamed(context, '/batcheslist');
               },
-              color: Colors.deepOrange,
               image: 'assets/images/batchicon.png',
               text: 'Batch Details',
             ),
@@ -85,7 +163,6 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               onTap: () {
                 Navigator.pushNamed(context, '/teacheracademyinfo');
               },
-              color: Colors.lightBlue,
               image: 'assets/images/studenticon.png',
               text: 'My Academy',
             ),
@@ -93,32 +170,20 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               onTap: () {
                 Navigator.pushNamed(context, '/teacher_attendacne_history');
               },
-              color: Colors.teal,
               image: 'assets/images/attendanceicon.png',
               text: 'Attendance',
             ),
-
             reuseList(
               onTap: () {
                 Navigator.pushNamed(context, '/teacherbatches');
               },
-              color: Colors.purpleAccent,
               image: 'assets/images/feesicon.png',
               text: 'Homework',
             ),
             reuseList(
               onTap: () {
-                Navigator.pushNamed(context, '/contactsupport');
+                Navigator.pushNamed(context, '/settings');
               },
-              color: Colors.green,
-              image: 'assets/images/contactuslogo.png',
-              text: 'Contact Us',
-            ),
-            reuseList(
-              onTap: () {
-                showComingSoon(context);
-              },
-              color: Colors.blueGrey,
               image: 'assets/images/settingsicon.png',
               text: 'Settings',
             ),

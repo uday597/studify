@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:studify/features/teacher/screens/student_list.dart';
 import 'package:studify/provider/admin/features/batch.dart';
 import 'package:studify/provider/teacher/login.dart';
 import 'package:studify/utils/appbar.dart';
@@ -31,12 +32,22 @@ class _BathcesListState extends State<BathcesList> {
     }
   }
 
+  void _openStudents(Map<String, dynamic> batch) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            BatchStudentList(batchId: batch['id'], batchName: batch['name']),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final batchProvider = context.watch<BatchProvider>();
 
     return Scaffold(
-      backgroundColor: Colors.white, // full white background
+      backgroundColor: Colors.white,
       appBar: ReuseAppbar(name: 'My Batches'),
       body: RefreshIndicator(
         onRefresh: _loadBatches,
@@ -48,7 +59,6 @@ class _BathcesListState extends State<BathcesList> {
                 ),
               )
             : ListView.builder(
-                physics: const BouncingScrollPhysics(),
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,
                   vertical: 20,
@@ -57,107 +67,89 @@ class _BathcesListState extends State<BathcesList> {
                 itemBuilder: (context, index) {
                   final batch = batchProvider.batches[index];
 
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
+                  return Card(
+                    color: Colors.white,
                     margin: const EdgeInsets.only(bottom: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.08),
-                          blurRadius: 10,
-                          spreadRadius: 1,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                      border: Border.all(color: Colors.blue.withOpacity(0.1)),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(18.0),
-                      child: Row(
+                    elevation: 5,
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 18,
+                        vertical: 12,
+                      ),
+                      leading: CircleAvatar(
+                        radius: 28,
+                        backgroundColor: Colors.blue.withOpacity(0.1),
+                        child: Text(
+                          '${index + 1}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                      ),
+                      title: Text(
+                        batch['name'] ?? 'No Name',
+                        style: const TextStyle(
+                          fontSize: 19,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Batch icon with number
-                          Container(
-                            height: 55,
-                            width: 55,
-                            decoration: BoxDecoration(
-                              color: Colors.blue.withOpacity(0.1),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: Text(
-                                '${index + 1}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20,
-                                  color: Colors.blueAccent,
-                                ),
+                          const SizedBox(height: 4),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.location_on_outlined,
+                                size: 18,
+                                color: Colors.blueAccent,
                               ),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-
-                          // Batch details
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  batch['name'] ?? 'No Name',
+                              const SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  batch['location'] ?? 'No Location',
                                   style: const TextStyle(
-                                    fontSize: 19,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
+                                    fontSize: 14,
+                                    color: Colors.black54,
                                   ),
                                 ),
-                                const SizedBox(height: 8),
-
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.location_on_outlined,
-                                      color: Colors.blueAccent,
-                                      size: 20,
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Expanded(
-                                      child: Text(
-                                        batch['location'] ?? 'No Location',
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.black54,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 2),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.person_outline,
+                                size: 18,
+                                color: Colors.blueAccent,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                batch['incharge'] ?? 'No Incharge',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black54,
                                 ),
-
-                                const SizedBox(height: 6),
-
-                                Row(
-                                  children: [
-                                    const Icon(
-                                      Icons.person_outline,
-                                      color: Colors.blueAccent,
-                                      size: 20,
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      batch['incharge'] ?? 'No Incharge',
-                                      style: const TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
+                      trailing: IconButton(
+                        icon: const Icon(
+                          Icons.arrow_forward_ios,
+                          color: Colors.blueAccent,
+                        ),
+                        onPressed: () => _openStudents(batch),
+                      ),
+                      onTap: () => _openStudents(batch),
                     ),
                   );
                 },

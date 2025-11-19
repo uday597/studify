@@ -119,7 +119,6 @@ class _StudentFeesScreenState extends State<StudentFeesScreen> {
 
                   const SizedBox(height: 20),
 
-                  // Action Buttons
                   Row(
                     children: [
                       Expanded(
@@ -185,28 +184,30 @@ class _StudentFeesScreenState extends State<StudentFeesScreen> {
                   Expanded(
                     child: studentFees.isEmpty
                         ? const Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.money_off,
-                                  size: 64,
-                                  color: Colors.grey,
-                                ),
-                                SizedBox(height: 16),
-                                Text(
-                                  'No fees records found',
-                                  style: TextStyle(
-                                    fontSize: 16,
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.currency_rupee,
+                                    size: 64,
                                     color: Colors.grey,
                                   ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  'Tap "Add New Fee" to add fees',
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                              ],
+                                  SizedBox(height: 16),
+                                  Text(
+                                    'No fees records found',
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'Tap "Add New Fee" to add fees',
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
                             ),
                           )
                         : RefreshIndicator(
@@ -380,7 +381,7 @@ class _StudentFeesScreenState extends State<StudentFeesScreen> {
                     );
 
                     Navigator.pop(context);
-                    await _loadStudentFees(); // Refresh list
+                    await _loadStudentFees();
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

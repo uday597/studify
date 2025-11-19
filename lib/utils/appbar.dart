@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
-PreferredSizeWidget ReuseAppbar({required String name, IconData? icon}) {
+PreferredSizeWidget ReuseAppbar({
+  required String name,
+  IconData? icon,
+  VoidCallback? onPressed,
+}) {
   return AppBar(
-    actions: [IconButton(onPressed: () {}, icon: Icon(icon))],
+    actions: [IconButton(onPressed: onPressed, icon: Icon(icon))],
 
     foregroundColor: Colors.white,
     backgroundColor: Colors.lightBlueAccent,

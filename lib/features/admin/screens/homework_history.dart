@@ -229,13 +229,12 @@ class _AdminHomeworkListScreenState extends State<AdminHomeworkListScreen> {
                   String? uploadedFilePath = hw['material_link'];
 
                   if (selectedFile != null) {
-                    // Ensure teacher_id is passed as UUID string
                     final teacherId = hw['teacher_id']?.toString() ?? '';
                     debugPrint('🟡 Uploading file for teacher: $teacherId');
 
                     uploadedFilePath = await provider.uploadMaterial(
                       selectedFile!,
-                      teacherId, // This should be a UUID string
+                      teacherId,
                     );
                   }
 

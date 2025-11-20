@@ -113,13 +113,74 @@ class HomeworkProvider extends ChangeNotifier {
 
   Future<String?> getSignedUrl(String filePath) async {
     try {
+      debugPrint('🟡 Generating signed URL for: $filePath');
+
+      // ✅ Check if filePath is valid
+      if (filePath.isEmpty) {
+        debugPrint('❌ filePath is empty');
+        return null;
+      }
+
+      // ✅ Check if file exists in storage
+      try {
+        final fileExists = await supabase.storage
+            .from('homework')
+            .list(path: filePath.split('/').first); // folder check
+
+        debugPrint('📁 Folder contents: $fileExists');
+      } catch (e) {
+        debugPrint('⚠️ Error checking file existence: $e');
+      }
+
+      // ✅ Generate signed URL
       final signedUrl = await supabase.storage
           .from('homework')
-          .createSignedUrl(filePath, 60 * 60); // 1 hour expiry
+          .createSignedUrl(filePath, 60 * 60); // 1 hour
 
+      debugPrint('✅ Signed URL generated successfully: $signedUrl');
       return signedUrl;
     } catch (e) {
       debugPrint('❌ Error generating signed URL: $e');
+
+      // ✅ Detailed error logging
+      if (e is StorageException) {
+        debugPrint('❌ Storage Error: ${e.message}');
+        debugPrint('❌ Storage Status: ${e.statusCode}');
+      }
+
+      // ✅ Alternative: Try to get public URL
+      try {
+        final publicUrl = supabase.storage
+            .from('homework')
+            .getPublicUrl(filePath);
+
+        debugPrint('🔗 Public URL: $publicUrl');
+        return publicUrl;
+      } catch (e2) {
+        debugPrint('❌ Public URL also failed: $e2');
+      }
+
+      return null;
+    }
+  }
+
+  Future<String?> getPublicUrl(String filePath) async {
+    try {
+      debugPrint('🟡 Getting public URL for: $filePath');
+
+      if (filePath.isEmpty) {
+        debugPrint('❌ filePath is empty');
+        return null;
+      }
+
+      final publicUrl = supabase.storage
+          .from('homework')
+          .getPublicUrl(filePath);
+
+      debugPrint('✅ Public URL: $publicUrl');
+      return publicUrl;
+    } catch (e) {
+      debugPrint('❌ Error getting public URL: $e');
       return null;
     }
   }
@@ -132,22 +193,38 @@ class HomeworkProvider extends ChangeNotifier {
   ) async {
     try {
       debugPrint("🗑 Deleting homework with ID: $id");
+      debugPrint("🗑 Material link to delete: $materialLink");
 
       // Delete attached file first (not required if null)
       if (materialLink != null && materialLink.isNotEmpty) {
-        await supabase.storage.from('homework').remove([materialLink]);
-        debugPrint("🗑 File removed from storage: $materialLink");
+        debugPrint("🗑 Attempting to delete file from storage: $materialLink");
+        final deleteResult = await supabase.storage.from('homework').remove([
+          materialLink,
+        ]);
+        debugPrint("🗑 File removal result: $deleteResult");
+      } else {
+        debugPrint("🗑 No material link to delete");
       }
 
       // Delete row from database
-      await supabase.from('homework').delete().eq('id', id);
+      debugPrint("🗑 Deleting database record with ID: $id");
+      final deleteResponse = await supabase
+          .from('homework')
+          .delete()
+          .eq('id', id);
+      debugPrint("🗑 Database delete response: $deleteResponse");
 
       // Refresh list
       await fetchHomeworkByBatch(batchId, adminId);
+      debugPrint("✅ Homework deleted successfully");
 
       return true;
     } catch (e) {
       debugPrint("❌ Error deleting homework: $e");
+      if (e is PostgrestException) {
+        debugPrint("❌ Postgrest Error: ${e.message}");
+        debugPrint("❌ Postgrest Details: ${e.details}");
+      }
       return false;
     }
   }

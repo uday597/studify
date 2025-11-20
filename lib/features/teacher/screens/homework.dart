@@ -58,30 +58,43 @@ class _HomeworkListScreenState extends State<HomeworkListScreen> {
 
   Future<void> _openMaterial(String filePath) async {
     try {
+      debugPrint('🟡 Opening file: $filePath');
+
+      final provider = context.read<HomeworkProvider>();
+      final signedUrl = await provider.getSignedUrl(filePath);
+
+      if (signedUrl == null) {
+        throw Exception('Could not generate signed URL');
+      }
+
+      debugPrint('🔗 Signed URL: $signedUrl');
+
+      // Download file first then open
       final fileName = filePath.split('/').last;
       final dir = await getTemporaryDirectory();
       final localFile = File('${dir.path}/$fileName');
 
+      // Check if file already exists
       if (await localFile.exists()) {
-        debugPrint('📂 File already cached locally: ${localFile.path}');
+        debugPrint('📂 File already cached: ${localFile.path}');
         await OpenFilex.open(localFile.path);
         return;
       }
 
-      final provider = context.read<HomeworkProvider>();
-      final signedUrl = await provider.getSignedUrl(filePath);
-      if (signedUrl == null) throw Exception('Could not generate signed URL');
-
-      debugPrint('🔗 Downloading from signed URL: $signedUrl');
+      // Download file
+      debugPrint('⬇️ Downloading file...');
       final response = await http.get(Uri.parse(signedUrl));
       if (response.statusCode != 200) {
-        throw Exception('Failed to download file');
+        throw Exception('Failed to download file: ${response.statusCode}');
       }
 
+      // Save file locally
       await localFile.writeAsBytes(response.bodyBytes);
-      debugPrint('✅ File saved locally: ${localFile.path}');
+      debugPrint('✅ File saved: ${localFile.path}');
 
+      // Open file
       await OpenFilex.open(localFile.path);
+      debugPrint('✅ File opened successfully');
     } catch (e) {
       debugPrint('❌ Error opening file: $e');
       showDialog(

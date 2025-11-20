@@ -70,27 +70,55 @@ class _AdminHomeworkListScreenState extends State<AdminHomeworkListScreen> {
 
   Future<void> _openMaterial(String filePath) async {
     try {
+      debugPrint('🟡 Opening file: $filePath');
+
       final fileName = filePath.split('/').last;
       final dir = await getTemporaryDirectory();
       final localFile = File('${dir.path}/$fileName');
 
+      // ✅ SMART CACHING: Pehle check karein cached file available hai ya nahi
       if (await localFile.exists()) {
-        await OpenFilex.open(localFile.path);
+        debugPrint('📂 Using cached file: ${localFile.path}');
+        final openResult = await OpenFilex.open(localFile.path);
+        debugPrint('✅ Cached file opened: ${openResult.message}');
         return;
       }
 
-      final provider = context.read<HomeworkProvider>();
-      final signedUrl = await provider.getSignedUrl(filePath);
-      if (signedUrl == null) throw Exception('Could not generate signed URL');
+      // ✅ Agar cached file nahi hai, toh download karein
+      debugPrint('⬇️ Cached file not found, downloading...');
 
-      final response = await http.get(Uri.parse(signedUrl));
+      final provider = context.read<HomeworkProvider>();
+      String? downloadUrl;
+
+      // Pehle public URL try karein
+      downloadUrl = await provider.getPublicUrl(filePath);
+
+      // Agar public URL fail ho, toh signed URL try karein
+      if (downloadUrl == null) {
+        debugPrint('🟡 Trying signed URL...');
+        downloadUrl = await provider.getSignedUrl(filePath);
+      }
+
+      if (downloadUrl == null) {
+        throw Exception('Could not generate download URL');
+      }
+
+      debugPrint('🔗 Downloading from: $downloadUrl');
+
+      final response = await http.get(Uri.parse(downloadUrl));
       if (response.statusCode != 200) {
-        throw Exception('Failed to download file');
+        throw Exception(
+          'Failed to download file. Status: ${response.statusCode}',
+        );
       }
 
       await localFile.writeAsBytes(response.bodyBytes);
-      await OpenFilex.open(localFile.path);
+      debugPrint('✅ File downloaded and saved: ${localFile.path}');
+
+      final openResult = await OpenFilex.open(localFile.path);
+      debugPrint('✅ File opened successfully: ${openResult.message}');
     } catch (e) {
+      debugPrint('❌ Error opening file: $e');
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
@@ -228,6 +256,25 @@ class _AdminHomeworkListScreenState extends State<AdminHomeworkListScreen> {
 
                   String? uploadedFilePath = hw['material_link'];
 
+                  // ✅ CACHE CLEAR: Purani file ka cache clear karein
+                  if (hw['material_link'] != null &&
+                      hw['material_link'].isNotEmpty) {
+                    try {
+                      final oldFileName = hw['material_link'].split('/').last;
+                      final dir = await getTemporaryDirectory();
+                      final oldLocalFile = File('${dir.path}/$oldFileName');
+
+                      if (await oldLocalFile.exists()) {
+                        await oldLocalFile.delete();
+                        debugPrint(
+                          '🗑️ Old cached file deleted: ${oldLocalFile.path}',
+                        );
+                      }
+                    } catch (e) {
+                      debugPrint('⚠️ Error deleting old cache: $e');
+                    }
+                  }
+
                   if (selectedFile != null) {
                     final teacherId = hw['teacher_id']?.toString() ?? '';
                     debugPrint('🟡 Uploading file for teacher: $teacherId');
@@ -236,10 +283,28 @@ class _AdminHomeworkListScreenState extends State<AdminHomeworkListScreen> {
                       selectedFile!,
                       teacherId,
                     );
+
+                    // ✅ NEW FILE CACHE: Nayi file ka bhi cache clear karein
+                    if (uploadedFilePath != null) {
+                      try {
+                        final newFileName = uploadedFilePath.split('/').last;
+                        final dir = await getTemporaryDirectory();
+                        final newLocalFile = File('${dir.path}/$newFileName');
+
+                        if (await newLocalFile.exists()) {
+                          await newLocalFile.delete();
+                          debugPrint(
+                            '🗑️ New file cache cleared: ${newLocalFile.path}',
+                          );
+                        }
+                      } catch (e) {
+                        debugPrint('⚠️ Error clearing new file cache: $e');
+                      }
+                    }
                   }
 
                   final success = await provider.updateHomework(
-                    id: hw['id'].toString(), // Ensure ID is string
+                    id: hw['id'].toString(),
                     title: titleCtrl.text.trim(),
                     description: descCtrl.text.trim(),
                     materialLink: uploadedFilePath,

@@ -48,9 +48,9 @@ class _SplashscreenState extends State<Splashscreen>
         height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.black, Colors.blue],
+            colors: [Colors.black26, Colors.lightBlueAccent],
             begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+            end: Alignment.centerRight,
           ),
         ),
         child: FadeTransition(

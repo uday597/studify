@@ -13,7 +13,7 @@ class _RoleScreenState extends State<RoleScreen> {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Colors.blueAccent,
+      backgroundColor: const Color.fromARGB(255, 92, 203, 255),
 
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -31,8 +31,8 @@ class _RoleScreenState extends State<RoleScreen> {
                 onTap: () => Navigator.pushNamed(context, '/adminlogin'),
                 image: 'assets/images/adminlogo.png',
                 text: 'Admin Login',
-                color1: Colors.purpleAccent,
-                color2: Colors.deepPurple,
+                color1: Colors.white,
+                color2: Colors.lightBlueAccent,
               ),
               SizedBox(height: size.height * 0.03),
               RoleCard(
@@ -41,16 +41,16 @@ class _RoleScreenState extends State<RoleScreen> {
                 },
                 image: 'assets/images/teacherlogo.jpg',
                 text: 'Teacher Login',
-                color1: Colors.green,
-                color2: Colors.greenAccent,
+                color1: Colors.white,
+                color2: Colors.lightBlueAccent,
               ),
               SizedBox(height: size.height * 0.03),
               RoleCard(
                 onTap: () => Navigator.pushNamed(context, '/studentlogin'),
                 image: 'assets/images/studenttlogo.png',
                 text: 'Student Login',
-                color1: Colors.orangeAccent,
-                color2: Colors.deepOrangeAccent,
+                color1: Colors.white,
+                color2: Colors.lightBlueAccent,
               ),
               SizedBox(height: size.height * 0.05),
               Text(
@@ -112,8 +112,8 @@ class RoleCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: color1.withOpacity(0.4),
-              blurRadius: 10,
+              color: Colors.black12,
+              blurRadius: 5,
               offset: const Offset(3, 4),
             ),
           ],
@@ -141,7 +141,7 @@ class RoleCard extends StatelessWidget {
                   style: TextStyle(
                     fontSize: size.width * 0.055,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: Colors.black54,
                     letterSpacing: 1.2,
                   ),
                 ),

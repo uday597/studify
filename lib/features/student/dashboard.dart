@@ -35,37 +35,117 @@ class _StudentDashboardState extends State<StudentDashboard> {
                 },
                 child: Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(20),
                     boxShadow: const [
                       BoxShadow(
-                        blurRadius: 6,
-                        color: Color.fromARGB(100, 0, 0, 0),
+                        color: Colors.black26,
+                        blurRadius: 8,
                         offset: Offset(2, 4),
                       ),
                     ],
                   ),
                   child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const CircleAvatar(
-                        radius: 35,
+                        radius: 40,
                         backgroundImage: AssetImage(
                           'assets/images/stulogo.png',
                         ),
                       ),
-                      const SizedBox(width: 12),
+
+                      const SizedBox(width: 16),
+
+                      // DETAILS AREA
                       Expanded(
-                        child: Text(
-                          'Welcome ${widget.studentData['name']}',
-                          style: TextStyle(
-                            color: Colors.deepPurple,
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 2,
-                          ),
-                          overflow: TextOverflow.ellipsis,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // NAME
+                            Text(
+                              'Welcome ${widget.studentData['name']}',
+                              style: const TextStyle(
+                                color: Colors.deepPurple,
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+
+                            const SizedBox(height: 10),
+
+                            // EMAIL
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.email,
+                                  size: 18,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 6),
+                                Expanded(
+                                  child: Text(
+                                    widget.studentData['email'] ?? 'No email',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black87,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 6),
+
+                            // PHONE
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.phone,
+                                  size: 18,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  widget.studentData['mobile'] ?? 'No phone',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const SizedBox(height: 6),
+
+                            // LOCATION
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.location_on,
+                                  size: 18,
+                                  color: Colors.grey,
+                                ),
+                                const SizedBox(width: 6),
+                                Expanded(
+                                  child: Text(
+                                    widget.studentData['address'] ??
+                                        'No location',
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.black87,
+                                    ),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                     ],

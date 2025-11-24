@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:studify/features/teacher/screens/batch_quiz.dart';
 import 'package:studify/features/teacher/teacher_profile.dart';
 import 'package:studify/utils/appbar.dart';
 import 'package:studify/utils/reuselist.dart';
@@ -175,16 +176,14 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
             ),
             reuseList(
               onTap: () {
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(
-                //     builder: (context) => SelectBatchForQuiz(
-                //       adminId: widget.teacherData['admin_id'],
-                //       teacherId: widget.teacherData['id'],
-                //       role: "teacher",
-                //     ),
-                //   ),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TeacherBatchSelectionScreen(
+                      teacherData: widget.teacherData,
+                    ),
+                  ),
+                );
               },
               image: 'assets/images/feesicon.png',
               text: 'Quiz',

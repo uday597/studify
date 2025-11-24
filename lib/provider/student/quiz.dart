@@ -1,4 +1,3 @@
-// student_quiz_provider.dart
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -39,6 +38,7 @@ class StudentQuizProvider with ChangeNotifier {
   }
 
   // Get available quizzes for student (automatically based on their batch)
+  // student_quiz_provider.dart में getAvailableQuizzes method
   Future<void> getAvailableQuizzes(String studentId) async {
     try {
       _loading = true;
@@ -58,7 +58,12 @@ class StudentQuizProvider with ChangeNotifier {
           .eq('is_published', true)
           .order('created_at', ascending: false);
 
-      _availableQuizzes = response;
+      // ✅ Null check और filter invalid data
+      _availableQuizzes = response.where((quiz) {
+        return quiz['id'] != null &&
+            quiz['title'] != null &&
+            quiz['batches'] != null;
+      }).toList();
 
       _loading = false;
       notifyListeners();
@@ -67,9 +72,8 @@ class StudentQuizProvider with ChangeNotifier {
       notifyListeners();
       rethrow;
     }
-  }
+  } // Get attempted quizzes by student
 
-  // Get attempted quizzes by student
   Future<void> getAttemptedQuizzes(String studentId) async {
     try {
       final response = await _supabase

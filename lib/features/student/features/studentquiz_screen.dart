@@ -19,13 +19,19 @@ class _StudentQuizScreenState extends State<StudentQuizScreen> {
   @override
   void initState() {
     super.initState();
-    _loadData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadData();
+    });
   }
 
   Future<void> _loadData() async {
-    final provider = context.read<StudentQuizProvider>();
-    await provider.getAvailableQuizzes(widget.studentId);
-    await provider.getAttemptedQuizzes(widget.studentId);
+    try {
+      final provider = context.read<StudentQuizProvider>();
+      await provider.getAvailableQuizzes(widget.studentId);
+      await provider.getAttemptedQuizzes(widget.studentId);
+    } catch (e) {
+      print('Error loading data: $e');
+    }
   }
 
   @override
@@ -90,27 +96,45 @@ class _StudentQuizScreenState extends State<StudentQuizScreen> {
       itemCount: provider.availableQuizzes.length,
       itemBuilder: (context, index) {
         final quiz = provider.availableQuizzes[index];
+
+        // ✅ Null check add करें
+        final quizId = quiz['id']?.toString() ?? '';
+        final title = quiz['title']?.toString() ?? 'Untitled Quiz';
+        final subject = quiz['subject']?.toString();
+        final totalMarks = quiz['total_marks']?.toString() ?? '0';
+        final batchName = quiz['batches'] != null
+            ? (quiz['batches']['name']?.toString() ?? 'No Batch')
+            : 'No Batch';
+
+        if (quizId.isEmpty) {
+          return const SizedBox(); // Skip invalid quizzes
+        }
+
         return Card(
           elevation: 2,
           margin: const EdgeInsets.only(bottom: 12),
           child: ListTile(
             leading: const Icon(Icons.quiz, color: Colors.lightBlueAccent),
             title: Text(
-              quiz['title'],
+              title,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (quiz['subject'] != null)
-                  Text('Subject: ${quiz['subject']}'),
-                Text('Total Marks: ${quiz['total_marks']}'),
-                Text('Batch: ${quiz['batches']['name']}'),
+                if (subject != null && subject.isNotEmpty)
+                  Text('Subject: $subject'),
+                Text('Total Marks: $totalMarks'),
+                Text('Batch: $batchName'),
               ],
             ),
             trailing: FutureBuilder<bool>(
-              future: provider.canAttemptQuiz(quiz['id'], widget.studentId),
+              future: provider.canAttemptQuiz(quizId, widget.studentId),
               builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                }
+
                 final canAttempt = snapshot.data ?? true;
                 return ElevatedButton(
                   onPressed: canAttempt
@@ -157,7 +181,16 @@ class _StudentQuizScreenState extends State<StudentQuizScreen> {
       itemCount: provider.attemptedQuizzes.length,
       itemBuilder: (context, index) {
         final attempt = provider.attemptedQuizzes[index];
-        final quiz = attempt['quizzes'];
+
+        // ✅ Null check add करें
+        final quiz = attempt['quizzes'] ?? {};
+        final quizTitle = quiz['title']?.toString() ?? 'Unknown Quiz';
+        final totalMarks = quiz['total_marks']?.toString() ?? '0';
+        final obtainedMarks =
+            attempt['total_marks_obtained']?.toString() ?? '0';
+        final correctAnswers = attempt['correct_answers']?.toString() ?? '0';
+        final totalQuestions = attempt['total_questions']?.toString() ?? '0';
+        final submittedAt = attempt['submitted_at']?.toString() ?? '';
 
         return Card(
           elevation: 2,
@@ -168,24 +201,24 @@ class _StudentQuizScreenState extends State<StudentQuizScreen> {
               color: Colors.green,
             ),
             title: Text(
-              quiz['title'],
+              quizTitle,
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             subtitle: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Score: ${attempt['total_marks_obtained']}/${quiz['total_marks']}',
-                ),
-                Text(
-                  'Correct: ${attempt['correct_answers']}/${attempt['total_questions']}',
-                ),
-                Text('Submitted: ${_formatDate(attempt['submitted_at'])}'),
+                Text('Score: $obtainedMarks/$totalMarks'),
+                Text('Correct: $correctAnswers/$totalQuestions'),
+                if (submittedAt.isNotEmpty)
+                  Text('Submitted: ${_formatDate(submittedAt)}'),
               ],
             ),
             trailing: IconButton(
               onPressed: () {
-                _viewQuizResults(context, attempt['id']);
+                final attemptId = attempt['id']?.toString();
+                if (attemptId != null && attemptId.isNotEmpty) {
+                  _viewQuizResults(context, attemptId);
+                }
               },
               icon: const Icon(Icons.visibility),
             ),
@@ -196,24 +229,37 @@ class _StudentQuizScreenState extends State<StudentQuizScreen> {
   }
 
   void _startQuizAttempt(BuildContext context, dynamic quiz) {
+    // ✅ Null check add करें
+    final quizId = quiz['id']?.toString();
+    if (quizId == null || quizId.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Invalid quiz data')));
+      return;
+    }
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => QuizAttemptScreen(
-          // ✅ अब QuizAttemptScreen call करें
-          quiz: quiz,
-          studentId: widget.studentId,
-        ),
+        builder: (context) =>
+            QuizAttemptScreen(quiz: quiz, studentId: widget.studentId),
       ),
     );
   }
 
   void _viewQuizResults(BuildContext context, String attemptId) {
     // Results screen implementation
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Viewing results for attempt: $attemptId')),
+    );
   }
 
   String _formatDate(String dateString) {
-    final date = DateTime.parse(dateString);
-    return '${date.day}/${date.month}/${date.year}';
+    try {
+      final date = DateTime.parse(dateString);
+      return '${date.day}/${date.month}/${date.year}';
+    } catch (e) {
+      return 'Invalid Date';
+    }
   }
 }

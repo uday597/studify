@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studify/features/student/features/homework.dart';
+import 'package:studify/features/student/features/studentquiz_screen.dart';
 import 'package:studify/features/student/studentoprofile.dart';
 import 'package:studify/utils/appbar.dart';
 import 'package:studify/utils/reuselist.dart';
@@ -173,6 +174,19 @@ class _StudentDashboardState extends State<StudentDashboard> {
               },
               image: 'assets/images/attendanceicon.png',
               text: 'Attendance',
+            ),
+            reuseList(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        StudentQuizScreen(studentId: widget.studentData['id']),
+                  ),
+                );
+              },
+              image: 'assets/images/ideas.png',
+              text: 'Quiz',
             ),
             reuseList(
               onTap: () {

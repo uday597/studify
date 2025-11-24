@@ -7,7 +7,9 @@ import 'package:studify/provider/admin/features/student.dart';
 import 'package:studify/provider/admin/features/teacher.dart';
 import 'package:studify/provider/admin/profile.dart';
 import 'package:studify/provider/homework.dart';
+import 'package:studify/provider/quiz_teacher&admin.dart';
 import 'package:studify/provider/student/login.dart';
+import 'package:studify/provider/student/quiz.dart';
 import 'package:studify/provider/teacher/login.dart';
 import 'package:studify/routing/app_routing.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -21,6 +23,8 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => QuizProvider()),
+        ChangeNotifierProvider(create: (_) => StudentQuizProvider()),
         ChangeNotifierProvider(create: (_) => HomeworkProvider()),
         ChangeNotifierProvider(create: (_) => FeesProvider()),
         ChangeNotifierProvider(create: (_) => AdminProfileProvider()),

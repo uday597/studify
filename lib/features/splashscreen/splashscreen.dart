@@ -27,7 +27,7 @@ class _SplashscreenState extends State<Splashscreen>
     );
     _fadeController.forward();
 
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 4), () {
       Navigator.pushReplacementNamed(context, '/rolescreen');
     });
   }

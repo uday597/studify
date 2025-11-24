@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:studify/features/admin/screens/quiz.dart';
 import 'package:studify/main.dart';
 import 'package:studify/features/admin/screens/staff_attendance.dart';
 import 'package:studify/features/admin/screens/student_attendance.dart';
@@ -403,6 +404,52 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 },
                 image: 'assets/images/stafficon.png',
                 text: 'Staff Manager',
+              ),
+
+              // In AdminDashboard - Fix the Quiz navigation
+              // In AdminDashboard - Quiz section
+              reuseList(
+                onTap: () {
+                  final parsedAdminId = int.tryParse(adminId ?? '');
+                  if (parsedAdminId == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Admin ID not available. Please sync admin profile.',
+                        ),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return;
+                  }
+
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) =>
+                        const Center(child: CircularProgressIndicator()),
+                  );
+
+                  // Navigate after a small delay to ensure provider is ready
+                  Future.delayed(const Duration(milliseconds: 100), () {
+                    Navigator.pop(context);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const BatchSelectionScreen(),
+                        settings: RouteSettings(
+                          arguments: {
+                            'id': parsedAdminId,
+                            'academy_name': academyName,
+                            'email': email,
+                          },
+                        ),
+                      ),
+                    );
+                  });
+                },
+                image: 'assets/images/ideas.png',
+                text: 'Quiz Management',
               ),
               reuseList(
                 onTap: () {

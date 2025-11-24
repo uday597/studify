@@ -175,6 +175,23 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
             ),
             reuseList(
               onTap: () {
+                // Navigator.push(
+                //   context,
+                //   MaterialPageRoute(
+                //     builder: (context) => SelectBatchForQuiz(
+                //       adminId: widget.teacherData['admin_id'],
+                //       teacherId: widget.teacherData['id'],
+                //       role: "teacher",
+                //     ),
+                //   ),
+                // );
+              },
+              image: 'assets/images/feesicon.png',
+              text: 'Quiz',
+            ),
+
+            reuseList(
+              onTap: () {
                 Navigator.pushNamed(context, '/teacherbatches');
               },
               image: 'assets/images/feesicon.png',

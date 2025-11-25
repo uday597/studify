@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:studify/features/admin/screens/exam_batch.dart';
 import 'package:studify/features/teacher/screens/batch_quiz.dart';
 import 'package:studify/features/teacher/teacher_profile.dart';
 import 'package:studify/utils/appbar.dart';
@@ -179,13 +180,29 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
+                    builder: (context) => ExamBatchSelectionScreen(
+                      userType: 'teacher',
+                      userId: widget.teacherData['id'],
+                      adminId: widget.teacherData['admin_id'],
+                    ),
+                  ),
+                );
+              },
+              image: 'assets/images/exam.png',
+              text: 'Manage Exam',
+            ),
+            reuseList(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
                     builder: (context) => TeacherBatchSelectionScreen(
                       teacherData: widget.teacherData,
                     ),
                   ),
                 );
               },
-              image: 'assets/images/feesicon.png',
+              image: 'assets/images/ideas.png',
               text: 'Quiz',
             ),
 
@@ -193,7 +210,7 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               onTap: () {
                 Navigator.pushNamed(context, '/teacherbatches');
               },
-              image: 'assets/images/feesicon.png',
+              image: 'assets/images/homework.png',
               text: 'Homework',
             ),
             reuseList(

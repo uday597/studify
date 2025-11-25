@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:studify/features/admin/screens/exam_batch.dart';
 import 'package:studify/features/admin/screens/quiz.dart';
+import 'package:studify/features/admin/screens/todo.dart';
 import 'package:studify/main.dart';
 import 'package:studify/features/admin/screens/staff_attendance.dart';
 import 'package:studify/features/admin/screens/student_attendance.dart';
@@ -28,6 +30,12 @@ class _AdminDashboardState extends State<AdminDashboard> {
           email = args['email'];
           adminId = args['id']?.toString();
         });
+        print('🔄 AdminDashboard Data:');
+        print('   academy_name: $academyName');
+        print('   email: $email');
+        print('   id: $adminId');
+        print('   args keys: ${args.keys}');
+        print('   args values: ${args.values}');
       }
     } else {
       debugPrint('⚠️ No arguments were passed to AdminDashboard');
@@ -405,9 +413,95 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 image: 'assets/images/stafficon.png',
                 text: 'Staff Manager',
               ),
+              reuseList(
+                onTap: () {
+                  final parsedAdminId = int.tryParse(adminId ?? '');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ToDoScreen(adminId: parsedAdminId!),
+                    ),
+                  );
+                },
+                image: 'assets/images/attendanceicon.png',
+                text: 'ToDo',
+              ),
 
-              // In AdminDashboard - Fix the Quiz navigation
-              // In AdminDashboard - Quiz section
+              // AdminDashboard mein Manage Exams ka onTap change karo:
+              reuseList(
+                onTap: () async {
+                  try {
+                    print('🔄 Fetching admin data directly...');
+
+                    // ✅ Direct Supabase se current admin ka data fetch karo
+                    final user = supabase.auth.currentUser;
+                    if (user == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('User not logged in')),
+                      );
+                      return;
+                    }
+
+                    print('📧 Current user email: ${user.email}');
+
+                    // ✅ Admin table se data fetch karo
+                    final response = await supabase
+                        .from('admin')
+                        .select('id, academy_name, email')
+                        .eq('email', user.email!);
+
+                    print('🔍 Admin query response: $response');
+
+                    if (response.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Admin profile not found in database'),
+                        ),
+                      );
+                      return;
+                    }
+
+                    final adminData = response.first;
+                    final adminId = adminData['id'];
+                    final academyName = adminData['academy_name'];
+                    final email = adminData['email'];
+
+                    print('✅ Admin data found:');
+                    print('   ID: $adminId');
+                    print('   Academy: $academyName');
+                    print('   Email: $email');
+
+                    if (adminId == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Admin ID is null in database'),
+                        ),
+                      );
+                      return;
+                    }
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ExamBatchSelectionScreen(
+                          userType: 'admin',
+                          userId: adminId.toString(),
+                          adminId: adminId is int
+                              ? adminId
+                              : int.parse(adminId.toString()),
+                        ),
+                      ),
+                    );
+                  } catch (e) {
+                    print('❌ Error: $e');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Error fetching admin data: $e')),
+                    );
+                  }
+                },
+                image: 'assets/images/attendanceicon.png',
+                text: 'Manage Exams',
+              ),
               reuseList(
                 onTap: () {
                   final parsedAdminId = int.tryParse(adminId ?? '');

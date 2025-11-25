@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:studify/features/student/features/exam.dart';
 import 'package:studify/features/student/features/homework.dart';
 import 'package:studify/features/student/features/studentquiz_screen.dart';
 import 'package:studify/features/student/studentoprofile.dart';
@@ -180,6 +181,22 @@ class _StudentDashboardState extends State<StudentDashboard> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
+                    builder: (context) => StudentExamsScreen(
+                      studentId: widget.studentData['id'],
+                      batchId: widget.studentData['batch_id'],
+                      studentName: widget.studentData['name'],
+                    ),
+                  ),
+                );
+              },
+              image: 'assets/images/exam.png',
+              text: 'Manage Exam',
+            ),
+            reuseList(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
                     builder: (context) =>
                         StudentQuizScreen(studentId: widget.studentData['id']),
                   ),
@@ -207,7 +224,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                   ),
                 );
               },
-              image: 'assets/images/feesicon.png',
+              image: 'assets/images/homework.png',
               text: 'Homework',
             ),
             reuseList(

@@ -38,7 +38,6 @@ class StudentQuizProvider with ChangeNotifier {
   }
 
   // Get available quizzes for student (automatically based on their batch)
-  // student_quiz_provider.dart में getAvailableQuizzes method
   Future<void> getAvailableQuizzes(String studentId) async {
     try {
       _loading = true;

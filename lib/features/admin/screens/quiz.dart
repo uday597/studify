@@ -85,6 +85,7 @@ class _BatchSelectionScreenState extends State<BatchSelectionScreen> {
           ),
         ],
       ),
+      backgroundColor: Colors.white,
       body: _isLoading
           ? const Center(
               child: Column(
@@ -257,6 +258,7 @@ class _BatchSelectionScreenState extends State<BatchSelectionScreen> {
               itemBuilder: (context, index) {
                 final batch = batchProvider.batches[index];
                 return Card(
+                  color: Colors.white,
                   margin: const EdgeInsets.only(bottom: 8),
                   child: ListTile(
                     leading: const Icon(

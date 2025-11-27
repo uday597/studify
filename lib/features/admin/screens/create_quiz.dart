@@ -47,6 +47,7 @@ class _QuizManagementScreenState extends State<QuizManagementScreen> {
           ),
         ],
       ),
+      backgroundColor: Colors.white,
       body: quizProvider.loading
           ? const Center(child: CircularProgressIndicator())
           : quizProvider.quizzes.isEmpty
@@ -74,6 +75,7 @@ class _QuizManagementScreenState extends State<QuizManagementScreen> {
               itemBuilder: (context, index) {
                 final quiz = quizProvider.quizzes[index];
                 return Card(
+                  color: Colors.white,
                   elevation: 2,
                   margin: const EdgeInsets.only(bottom: 12),
                   child: ListTile(

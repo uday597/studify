@@ -104,12 +104,10 @@ class _ExamDialogState extends State<ExamDialog> {
     if (picked != null) setState(() => _endTime = picked);
   }
 
-  // ExamDialog mein _submitForm method ko update karo
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate() && !_isSubmitting) {
       setState(() => _isSubmitting = true);
 
-      // ✅ Create exam data WITHOUT admin_id
       final examData = {
         'exam_name': _examNameController.text.trim(),
         'subject_name': _subjectNameController.text.trim(),
@@ -171,6 +169,7 @@ class _ExamDialogState extends State<ExamDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.white,
       title: Text(widget.isEdit ? 'Edit Exam' : 'Add New Exam'),
       content: SingleChildScrollView(
         child: Form(

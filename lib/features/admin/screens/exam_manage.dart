@@ -51,6 +51,7 @@ class _ExamManagementScreenState extends State<ExamManagementScreen> {
           ),
         ],
       ),
+      backgroundColor: Colors.white,
       body: Consumer<ExamsProvider>(
         builder: (context, examsProvider, child) {
           if (examsProvider.loading) {
@@ -96,6 +97,7 @@ class _ExamManagementScreenState extends State<ExamManagementScreen> {
   // ✅ Add this missing method
   Widget _buildExamCard(Map<String, dynamic> exam, BuildContext context) {
     return Card(
+      color: Colors.white,
       elevation: 3,
       margin: const EdgeInsets.only(bottom: 12),
       child: Padding(
@@ -117,6 +119,7 @@ class _ExamManagementScreenState extends State<ExamManagementScreen> {
                   ),
                 ),
                 PopupMenuButton(
+                  color: Colors.white,
                   itemBuilder: (context) => [
                     const PopupMenuItem(
                       value: 'edit',

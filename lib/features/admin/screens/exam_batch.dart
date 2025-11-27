@@ -24,7 +24,6 @@ class _ExamBatchSelectionScreenState extends State<ExamBatchSelectionScreen> {
   @override
   void initState() {
     super.initState();
-    // ✅ Fetch batches when screen loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<BatchProvider>().fetchData(adminId: widget.adminId);
     });
@@ -38,9 +37,9 @@ class _ExamBatchSelectionScreenState extends State<ExamBatchSelectionScreen> {
         backgroundColor: Colors.lightBlueAccent,
         foregroundColor: Colors.white,
       ),
+      backgroundColor: Colors.white,
       body: Consumer<BatchProvider>(
         builder: (context, batchProvider, child) {
-          // ✅ Now loading property is available
           if (batchProvider.loading) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -55,6 +54,7 @@ class _ExamBatchSelectionScreenState extends State<ExamBatchSelectionScreen> {
             itemBuilder: (context, index) {
               final batch = batchProvider.batches[index];
               return Card(
+                color: Colors.white,
                 elevation: 2,
                 margin: const EdgeInsets.only(bottom: 12),
                 child: ListTile(

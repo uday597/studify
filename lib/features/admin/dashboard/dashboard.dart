@@ -30,12 +30,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
           email = args['email'];
           adminId = args['id']?.toString();
         });
-        print('🔄 AdminDashboard Data:');
-        print('   academy_name: $academyName');
-        print('   email: $email');
-        print('   id: $adminId');
-        print('   args keys: ${args.keys}');
-        print('   args values: ${args.values}');
       }
     } else {
       debugPrint('⚠️ No arguments were passed to AdminDashboard');
@@ -239,179 +233,65 @@ class _AdminDashboardState extends State<AdminDashboard> {
               ),
               reuseList(
                 onTap: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) {
-                      return Dialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
+                  Navigator.pop(context);
+                  final parsedAdminId = int.tryParse(adminId ?? '');
+                  if (parsedAdminId == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Admin numeric ID not available. Please sync admin profile.',
                         ),
-                        elevation: 10,
-                        backgroundColor: Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Icon(
-                                Icons.check_circle_outline,
-                                color: Colors.indigo,
-                                size: 50,
-                              ),
-                              const SizedBox(height: 10),
-                              const Text(
-                                "Mark Attendance",
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.indigo,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              const Text(
-                                "Please choose which attendance you want to mark.",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 15,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                              const SizedBox(height: 25),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  ElevatedButton.icon(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.indigo,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 14,
-                                        vertical: 12,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      final parsedAdminId = int.tryParse(
-                                        adminId ?? '',
-                                      );
-                                      if (parsedAdminId == null) {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Admin numeric ID not available. Please sync admin profile.',
-                                            ),
-                                          ),
-                                        );
-                                        return;
-                                      }
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              StudentAttendanceScreen(
-                                                adminId: parsedAdminId,
-                                              ),
-                                        ),
-                                      );
-                                    },
-                                    icon: const Icon(
-                                      Icons.school,
-                                      color: Colors.white,
-                                    ),
-                                    label: const Text(
-                                      "Student",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-
-                                  // 👩‍🏫 Teacher Attendance Button
-                                  ElevatedButton.icon(
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.deepPurple,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 14,
-                                        vertical: 12,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                      final parsedAdminId = int.tryParse(
-                                        adminId ?? '',
-                                      );
-                                      if (parsedAdminId == null) {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            content: Text(
-                                              'Admin numeric ID not available. Please sync admin profile.',
-                                            ),
-                                          ),
-                                        );
-                                        return;
-                                      }
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              TeacherAttendanceScreen(
-                                                adminId: parsedAdminId,
-                                              ),
-                                        ),
-                                      );
-                                    },
-                                    icon: const Icon(
-                                      Icons.person,
-                                      color: Colors.white,
-                                    ),
-                                    label: const Text(
-                                      "Teacher",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 15),
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text(
-                                  "Cancel",
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
+                      ),
+                    );
+                    return;
+                  }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          StudentAttendanceScreen(adminId: parsedAdminId),
+                    ),
                   );
                 },
                 image: 'assets/images/attendanceicon.png',
-                text: 'Attendance',
+                text: 'Student Attendance',
               ),
               reuseList(
                 onTap: () {
-                  Navigator.pushNamed(context, '/addteacher');
+                  Navigator.pop(context);
+                  final parsedAdminId = int.tryParse(adminId ?? '');
+                  if (parsedAdminId == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'Admin numeric ID not available. Please sync admin profile.',
+                        ),
+                      ),
+                    );
+                    return;
+                  }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          TeacherAttendanceScreen(adminId: parsedAdminId),
+                    ),
+                  );
                 },
-                image: 'assets/images/stafficon.png',
-                text: 'Staff Manager',
+                image: 'assets/images/teacher_attendance.png',
+                text: 'Teacher Attendance',
+              ),
+              reuseList(
+                onTap: () {
+                  Navigator.pushNamed(context, '/adminstudents');
+                },
+                image: 'assets/images/studenticon.png',
+                text: 'Student',
+              ),
+              reuseList(
+                onTap: () {},
+                image: 'assets/images/questioning.png',
+                text: 'Enquiry Manager',
               ),
               reuseList(
                 onTap: () {
@@ -423,17 +303,15 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     ),
                   );
                 },
-                image: 'assets/images/attendanceicon.png',
+                image: 'assets/images/toDo.png',
                 text: 'ToDo',
               ),
 
-              // AdminDashboard mein Manage Exams ka onTap change karo:
               reuseList(
                 onTap: () async {
                   try {
                     print('🔄 Fetching admin data directly...');
 
-                    // ✅ Direct Supabase se current admin ka data fetch karo
                     final user = supabase.auth.currentUser;
                     if (user == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -444,7 +322,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
                     print('📧 Current user email: ${user.email}');
 
-                    // ✅ Admin table se data fetch karo
                     final response = await supabase
                         .from('admin')
                         .select('id, academy_name, email')
@@ -463,13 +340,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
                     final adminData = response.first;
                     final adminId = adminData['id'];
-                    final academyName = adminData['academy_name'];
-                    final email = adminData['email'];
-
-                    print('✅ Admin data found:');
-                    print('   ID: $adminId');
-                    print('   Academy: $academyName');
-                    print('   Email: $email');
 
                     if (adminId == null) {
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -499,7 +369,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
                     );
                   }
                 },
-                image: 'assets/images/attendanceicon.png',
+                image: 'assets/images/exam.png',
                 text: 'Manage Exams',
               ),
               reuseList(

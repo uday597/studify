@@ -46,10 +46,12 @@ class _QuizDetailsScreenState extends State<QuizDetailsScreen> {
           ),
         ],
       ),
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           // Quiz Info Card
           Card(
+            color: Colors.white,
             margin: const EdgeInsets.all(16),
             child: Padding(
               padding: const EdgeInsets.all(16),
@@ -255,6 +257,7 @@ class _QuizDetailsScreenState extends State<QuizDetailsScreen> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
+          backgroundColor: Colors.white,
           title: const Text('Add Question'),
           content: SingleChildScrollView(
             child: Column(
@@ -426,6 +429,7 @@ class _QuizDetailsScreenState extends State<QuizDetailsScreen> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
+          backgroundColor: Colors.white,
           title: const Text('Edit Question'),
           content: SingleChildScrollView(
             child: Column(

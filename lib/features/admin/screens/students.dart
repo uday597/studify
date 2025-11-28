@@ -16,6 +16,7 @@ class AddStudentScreen extends StatefulWidget {
 class _AddStudentScreenState extends State<AddStudentScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
+  final TextEditingController rollnocontroller = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController fatherController = TextEditingController();
   final TextEditingController mobileController = TextEditingController();
@@ -66,6 +67,12 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                 text: 'Student Name',
                 validator: (v) =>
                     v == null || v.isEmpty ? 'Enter student name' : null,
+              ),
+              ReuseTextfield(
+                controller: nameController,
+                text: 'Student Roll No',
+                validator: (v) =>
+                    v == null || v.isEmpty ? 'Enter student roll no' : null,
               ),
               ReuseTextfield(
                 controller: emailController,
@@ -221,6 +228,7 @@ class _AddStudentScreenState extends State<AddStudentScreen> {
                       }
 
                       await studentProvider.addStudentdata(
+                        rollno: rollnocontroller.text,
                         password: passwordcontroller.text,
                         name: nameController.text,
                         email: emailController.text,

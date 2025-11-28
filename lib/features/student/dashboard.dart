@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:studify/features/student/features/behavior.dart';
 import 'package:studify/features/student/features/exam.dart';
 import 'package:studify/features/student/features/homework.dart';
+import 'package:studify/features/student/features/student_leave.dart';
 import 'package:studify/features/student/features/studentquiz_screen.dart';
 import 'package:studify/features/student/studentoprofile.dart';
 import 'package:studify/utils/appbar.dart';
@@ -193,6 +195,22 @@ class _StudentDashboardState extends State<StudentDashboard> {
               text: 'Manage Exam',
             ),
             reuseList(
+              image: 'assets/images/exam.png',
+              text: 'Student Behavior',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => StudentBehaviorScreen(
+                      studentId: widget.studentData['id'],
+                      adminId: widget.studentData['admin_id'],
+                    ),
+                  ),
+                );
+              },
+            ),
+
+            reuseList(
               onTap: () {
                 Navigator.push(
                   context,
@@ -204,6 +222,22 @@ class _StudentDashboardState extends State<StudentDashboard> {
               },
               image: 'assets/images/ideas.png',
               text: 'Quiz',
+            ),
+            reuseList(
+              onTap: () {
+                ;
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => StudentLeave(
+                      adminId: widget.studentData['admin_id'],
+                      studentId: widget.studentData['id'],
+                    ),
+                  ),
+                );
+              },
+              image: 'assets/images/questioning.png',
+              text: 'Leave Manager',
             ),
             reuseList(
               onTap: () {
@@ -227,6 +261,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
               image: 'assets/images/homework.png',
               text: 'Homework',
             ),
+
             reuseList(
               onTap: () {
                 Navigator.pushNamed(context, '/contactsupport');

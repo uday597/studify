@@ -1,4 +1,3 @@
-// quiz_details_screen.dart
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:studify/provider/quiz_teacher&admin.dart';

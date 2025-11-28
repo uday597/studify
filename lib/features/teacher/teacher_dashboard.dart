@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:studify/features/admin/screens/exam_batch.dart';
 import 'package:studify/features/teacher/screens/batch_quiz.dart';
+import 'package:studify/features/teacher/screens/leave_manager.dart';
 import 'package:studify/features/teacher/teacher_profile.dart';
 import 'package:studify/utils/appbar.dart';
 import 'package:studify/utils/reuselist.dart';
@@ -60,12 +61,10 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
 
                       const SizedBox(width: 16),
 
-                      // DETAILS AREA
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // NAME
                             Text(
                               'Welcome ${widget.teacherData['name']}',
                               style: const TextStyle(
@@ -190,6 +189,21 @@ class _TeacherDashboardState extends State<TeacherDashboard> {
               },
               image: 'assets/images/exam.png',
               text: 'Manage Exam',
+            ),
+            reuseList(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TeacherLeave(
+                      adminId: widget.teacherData['admin_id'],
+                      teacherId: widget.teacherData['id'],
+                    ),
+                  ),
+                );
+              },
+              image: 'assets/images/questioning.png',
+              text: 'Leave Manager',
             ),
             reuseList(
               onTap: () {

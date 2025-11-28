@@ -69,6 +69,10 @@ class _StudentProfileState extends State<StudentProfile> {
                       icon: Icons.person,
                     ),
                     buildTextField(
+                      label: _getSafeString(student['rollno']),
+                      icon: Icons.numbers,
+                    ),
+                    buildTextField(
                       label: _getSafeString(student['email']),
                       icon: Icons.mail,
                     ),
@@ -196,6 +200,9 @@ class _StudentProfileState extends State<StudentProfile> {
     final nameController = TextEditingController(
       text: _getSafeString(student['name']),
     );
+    final rollnocontroller = TextEditingController(
+      text: _getSafeString(student['rollno']),
+    );
     final emailController = TextEditingController(
       text: _getSafeString(student['email']),
     );
@@ -222,6 +229,7 @@ class _StudentProfileState extends State<StudentProfile> {
             children: [
               _dialogTextField(nameController, 'Name'),
               _dialogTextField(emailController, 'Email'),
+              _dialogTextField(rollnocontroller, 'rollno'),
               _dialogTextField(fatherController, 'Father Name'),
               _dialogTextField(mobileController, 'Mobile'),
               _dialogTextField(addressController, 'Address'),
@@ -242,6 +250,7 @@ class _StudentProfileState extends State<StudentProfile> {
                 await provider.updateStudentdata(
                   id: _getSafeString(student['id']),
                   name: nameController.text,
+                  rollno: rollnocontroller.text,
                   email: emailController.text,
                   father: fatherController.text,
                   gender: _getSafeString(student['gender']),
@@ -257,7 +266,7 @@ class _StudentProfileState extends State<StudentProfile> {
                     content: Text('Student updated successfully ✅'),
                   ),
                 );
-                setState(() {}); // refresh data
+                setState(() {});
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:studify/features/admin/screens/behavior_batch.dart';
 import 'package:studify/features/admin/screens/exam_batch.dart';
+import 'package:studify/features/admin/screens/leave_manager.dart';
 import 'package:studify/features/admin/screens/quiz.dart';
 import 'package:studify/features/admin/screens/todo.dart';
 import 'package:studify/main.dart';
@@ -281,17 +283,20 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 image: 'assets/images/teacher_attendance.png',
                 text: 'Teacher Attendance',
               ),
+
               reuseList(
                 onTap: () {
-                  Navigator.pushNamed(context, '/adminstudents');
+                  final parsedAdminId = int.parse(adminId.toString());
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          LeaveManager(adminId: parsedAdminId),
+                    ),
+                  );
                 },
-                image: 'assets/images/studenticon.png',
-                text: 'Student',
-              ),
-              reuseList(
-                onTap: () {},
                 image: 'assets/images/questioning.png',
-                text: 'Enquiry Manager',
+                text: 'Leave Manager',
               ),
               reuseList(
                 onTap: () {
@@ -415,6 +420,20 @@ class _AdminDashboardState extends State<AdminDashboard> {
                 image: 'assets/images/ideas.png',
                 text: 'Quiz Management',
               ),
+              reuseList(
+                onTap: () {
+                  final parsed = int.tryParse(adminId ?? '');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BehaviorBatchSelection(adminId: parsed!),
+                    ),
+                  );
+                },
+                image: 'assets/images/toDo.png',
+                text: 'Behavior Manager',
+              ),
+
               reuseList(
                 onTap: () {
                   Navigator.pushNamed(context, '/tutionfees');

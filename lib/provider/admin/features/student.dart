@@ -48,10 +48,12 @@ class StudentProvider extends ChangeNotifier {
     required String batchId,
     required String password,
     required int adminId,
+    required String rollno,
   }) async {
     try {
       await supabase.from('students').insert({
         'name': name,
+        'rollno': rollno,
         'father': father,
         'email': email,
         'gender': gender,
@@ -78,12 +80,14 @@ class StudentProvider extends ChangeNotifier {
     required String password,
     required String batchId,
     required int adminId,
+    required String rollno,
   }) async {
     try {
       await supabase
           .from('students')
           .update({
             'name': name,
+            'rollno': rollno,
             'email': email,
             'father': father,
             'gender': gender,

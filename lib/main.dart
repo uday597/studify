@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:studify/provider/admin/features/attendance.dart';
 import 'package:studify/provider/admin/features/batch.dart';
+import 'package:studify/provider/admin/features/behavior.dart';
 import 'package:studify/provider/admin/features/fees.dart';
+import 'package:studify/provider/admin/features/leave.dart';
 import 'package:studify/provider/admin/features/student.dart';
 import 'package:studify/provider/admin/features/teacher.dart';
 import 'package:studify/provider/admin/features/todo.dart';
@@ -25,6 +27,9 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (_) => LeaveManagerProvider()),
+
+        ChangeNotifierProvider(create: (_) => BehaviorProvider()),
         ChangeNotifierProvider(create: (_) => ExamsProvider()),
         ChangeNotifierProvider(create: (_) => ToDoProvider()),
         ChangeNotifierProvider(create: (_) => QuizProvider()),

@@ -58,6 +58,11 @@ class _StudentProfile2State extends State<StudentProfile2> {
                 child: Column(
                   children: [
                     buildTextField(label: student['name'], icon: Icons.person),
+                    buildTextField(
+                      label: student['rollno'],
+                      icon: Icons.person,
+                    ),
+
                     buildTextField(label: student['email'], icon: Icons.mail),
 
                     buildTextField(label: student['mobile'], icon: Icons.phone),

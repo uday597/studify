@@ -4,13 +4,13 @@ import 'package:studify/main.dart';
 class BatchProvider extends ChangeNotifier {
   List<Map<String, dynamic>> _batches = [];
   List<Map<String, dynamic>> get batches => _batches;
-  bool _loading = false; // ✅ Add this
-  bool get loading => _loading; // ✅ Add this
+  bool _loading = false;
+  bool get loading => _loading;
 
   Future<void> fetchData({required int adminId}) async {
     try {
-      _loading = true; // ✅ Add this
-      notifyListeners(); // ✅ Add this
+      _loading = true;
+      notifyListeners();
 
       final List<dynamic> data = await supabase
           .from('batches')
@@ -21,12 +21,11 @@ class BatchProvider extends ChangeNotifier {
     } catch (e) {
       throw Exception('Error fetching batches: $e');
     } finally {
-      _loading = false; // ✅ Add this
-      notifyListeners(); // ✅ Add this
+      _loading = false;
+      notifyListeners();
     }
   }
 
-  // ... rest of your existing code remains same
   Future<void> addBatch({
     required String name,
     required String location,

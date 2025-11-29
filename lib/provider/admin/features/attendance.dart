@@ -17,7 +17,6 @@ class AttendanceProvider extends ChangeNotifier {
 
       final date = DateTime.now().toIso8601String().split('T')[0];
 
-      
       final existingRecord = await supabase
           .from('teacher_attendance')
           .select()
@@ -55,6 +54,31 @@ class AttendanceProvider extends ChangeNotifier {
     }
   }
 
+  Future<List<Map<String, dynamic>>> getMonthlyStudentAttendance({
+    required String studentId,
+    required int adminId,
+  }) async {
+    try {
+      final today = DateTime.now();
+      final lastMonth = today.subtract(Duration(days: 30));
+      final startDate = lastMonth.toIso8601String().split('T')[0];
+      final endDate = today.toIso8601String().split('T')[0];
+
+      final data = await supabase
+          .from('student_attendance')
+          .select('date, status')
+          .eq('student_id', studentId)
+          .eq('admin_id', adminId)
+          .gte('date', startDate)
+          .lte('date', endDate)
+          .order('date', ascending: true);
+
+      return data.cast<Map<String, dynamic>>();
+    } catch (e) {
+      throw Exception('Error fetching monthly attendance: $e');
+    }
+  }
+
   Future<void> markStudentAttendance({
     required String studentId,
     required String batchId,
@@ -87,7 +111,6 @@ class AttendanceProvider extends ChangeNotifier {
             .eq('id', existingRecord['id']);
         debugPrint('✅ UPDATED attendance for student: $studentId');
       } else {
-        
         await supabase.from('student_attendance').insert({
           'student_id': studentId,
           'batch_id': batchId,

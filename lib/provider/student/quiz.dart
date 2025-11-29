@@ -88,6 +88,82 @@ class StudentQuizProvider with ChangeNotifier {
     }
   }
 
+  Future<Map<String, dynamic>> generateQuizReport(String studentId) async {
+    try {
+      // STEP 1: Fetch all attempts
+      final attempts = await _supabase
+          .from('student_quiz_attempts')
+          .select('*, quizzes(title), batches(name)')
+          .eq('student_id', studentId)
+          .order('submitted_at', ascending: false);
+
+      if (attempts.isEmpty) {
+        return {
+          'attempts': [],
+          'summary': {
+            'total_quizzes': 0,
+            'average_percentage': 0,
+            'accuracy': 0,
+            'total_correct': 0,
+            'total_wrong': 0,
+          },
+        };
+      }
+
+      int totalCorrect = 0;
+      int totalWrong = 0;
+      double totalPercentage = 0;
+
+      List<Map<String, dynamic>> quizReports = [];
+
+      // STEP 2: For Each Quiz
+      for (var attempt in attempts) {
+        final totalQuestions = (attempt['total_questions'] as num).toInt();
+        final correct = (attempt['correct_answers'] as num).toInt();
+        final wrong = (attempt['wrong_answers'] as num).toInt();
+        final totalMarks =
+            (attempt['total_marks_obtained'] as num?)?.toInt() ?? 0;
+
+        final percentage = totalQuestions > 0
+            ? (correct / totalQuestions) * 100
+            : 0;
+
+        totalCorrect += correct;
+        totalWrong += wrong;
+        totalPercentage += percentage;
+
+        quizReports.add({
+          'quiz_title': attempt['quizzes']['title'],
+          'batch': attempt['batches']['name'],
+          'date': attempt['submitted_at'],
+          'total_questions': totalQuestions,
+          'correct_answers': correct,
+          'wrong_answers': wrong,
+          'percentage': percentage.toStringAsFixed(1),
+          'total_marks_obtained': totalMarks,
+        });
+      }
+
+      // STEP 3: Overall summary
+      final avgPercentage = totalPercentage / attempts.length;
+      final accuracy = (totalCorrect + totalWrong) > 0
+          ? (totalCorrect / (totalCorrect + totalWrong)) * 100
+          : 0;
+
+      final summary = {
+        'total_quizzes': attempts.length,
+        'average_percentage': avgPercentage.toStringAsFixed(1),
+        'accuracy': accuracy.toStringAsFixed(1),
+        'total_correct': totalCorrect,
+        'total_wrong': totalWrong,
+      };
+
+      return {'attempts': quizReports, 'summary': summary};
+    } catch (e) {
+      throw Exception("Error generating quiz report: $e");
+    }
+  }
+
   // Start quiz attempt
   Future<void> startQuizAttempt({
     required String quizId,

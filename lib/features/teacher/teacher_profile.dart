@@ -16,7 +16,7 @@ class _TeacherProfile2State extends State<TeacherProfile2> {
     final teacher = widget.TecherData;
 
     return Scaffold(
-      appBar: ReuseAppbar(name: 'Student Profile'),
+      appBar: ReuseAppbar(name: 'Teacher Profile'),
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(

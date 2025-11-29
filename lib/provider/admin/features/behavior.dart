@@ -7,7 +7,7 @@ class BehaviorProvider extends ChangeNotifier {
   List<Map<String, dynamic>> records = [];
   bool isLoading = false;
 
-  // ✅ INSERT new behavior record
+  //  INSERT new behavior record
   Future<void> addBehavior({
     required String studentId,
     required String batchId,
@@ -32,7 +32,7 @@ class BehaviorProvider extends ChangeNotifier {
     }, onConflict: 'student_id');
   }
 
-  // ✅ FETCH latest record for a student
+  //  Fetch latest record for a student
   Future<void> fetchLatest(String studentId) async {
     isLoading = true;
     notifyListeners();
@@ -50,7 +50,7 @@ class BehaviorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ✅ FETCH full history
+  //  FETCH full history
   Future<void> fetchHistory(String studentId) async {
     isLoading = true;
     notifyListeners();
@@ -67,7 +67,7 @@ class BehaviorProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // ✅ UPDATE existing record
+  //  UPDATE existing record
   Future<void> updateBehavior({
     required String id,
     required int classBehavior,
@@ -90,7 +90,7 @@ class BehaviorProvider extends ChangeNotifier {
         .eq('id', id);
   }
 
-  // ✅ DELETE a record
+  //  DELETE a record
   Future<void> deleteBehavior(String id) async {
     await supabase.from('behavior_records').delete().eq('id', id);
   }

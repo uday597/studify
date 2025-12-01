@@ -421,6 +421,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
         ),
       ),
       drawer: Drawer(
+        backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(20),

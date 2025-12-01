@@ -127,7 +127,6 @@ class _StudentDashboardState extends State<StudentDashboard> {
 
                             const SizedBox(height: 6),
 
-                            // LOCATION
                             Row(
                               children: [
                                 const Icon(
@@ -192,7 +191,7 @@ class _StudentDashboardState extends State<StudentDashboard> {
                 );
               },
               image: 'assets/images/exam.png',
-              text: 'Manage Exam',
+              text: 'Exam',
             ),
             reuseList(
               image: 'assets/images/exam.png',

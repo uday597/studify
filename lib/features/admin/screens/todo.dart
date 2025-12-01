@@ -29,6 +29,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -78,6 +79,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -128,6 +130,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
         onPressed: _openAddTodoDialog,
         child: const Icon(Icons.add),
       ),
+      backgroundColor: Colors.white,
       body: Consumer<ToDoProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
@@ -150,6 +153,7 @@ class _ToDoScreenState extends State<ToDoScreen> {
               final todo = provider.ToDoList[index];
 
               return Card(
+                color: Colors.white,
                 elevation: 3,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),

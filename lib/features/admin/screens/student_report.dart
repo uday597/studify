@@ -373,6 +373,7 @@ class _StudentReportState extends State<StudentReport> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ReuseAppbar(name: 'Generate Report'),
+      backgroundColor: Colors.white,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

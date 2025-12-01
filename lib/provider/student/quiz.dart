@@ -22,7 +22,6 @@ class StudentQuizProvider with ChangeNotifier {
   bool get quizSubmitted => _quizSubmitted;
   Map<String, dynamic> get quizResults => _quizResults;
 
-  // Get student's batch ID
   Future<String?> getStudentBatchId(String studentId) async {
     try {
       final studentData = await _supabase
@@ -37,19 +36,16 @@ class StudentQuizProvider with ChangeNotifier {
     }
   }
 
-  // Get available quizzes for student (automatically based on their batch)
   Future<void> getAvailableQuizzes(String studentId) async {
     try {
       _loading = true;
       notifyListeners();
 
-      // First get student's batch
       final studentBatchId = await getStudentBatchId(studentId);
       if (studentBatchId == null) {
         throw Exception('Student batch not found');
       }
 
-      // Get quizzes for student's batch
       final response = await _supabase
           .from('quizzes')
           .select('*, batches(name)')
@@ -57,7 +53,6 @@ class StudentQuizProvider with ChangeNotifier {
           .eq('is_published', true)
           .order('created_at', ascending: false);
 
-      // ✅ Null check और filter invalid data
       _availableQuizzes = response.where((quiz) {
         return quiz['id'] != null &&
             quiz['title'] != null &&
@@ -116,7 +111,6 @@ class StudentQuizProvider with ChangeNotifier {
 
       List<Map<String, dynamic>> quizReports = [];
 
-      // STEP 2: For Each Quiz
       for (var attempt in attempts) {
         final totalQuestions = (attempt['total_questions'] as num).toInt();
         final correct = (attempt['correct_answers'] as num).toInt();
@@ -171,13 +165,11 @@ class StudentQuizProvider with ChangeNotifier {
     required int totalQuestions,
   }) async {
     try {
-      // Get student's batch automatically
       final studentBatchId = await getStudentBatchId(studentId);
       if (studentBatchId == null) {
         throw Exception('Student batch not found');
       }
 
-      // Check if already attempted
       final existingAttempt = await _supabase
           .from('student_quiz_attempts')
           .select()
@@ -189,7 +181,6 @@ class StudentQuizProvider with ChangeNotifier {
         throw Exception('You have already attempted this quiz');
       }
 
-      // Start new attempt or resume existing one
       if (existingAttempt == null) {
         final response = await _supabase
             .from('student_quiz_attempts')
@@ -207,7 +198,6 @@ class StudentQuizProvider with ChangeNotifier {
       } else {
         _currentAttempt = existingAttempt;
 
-        // Load previous answers if any
         if (_currentAttempt['answers'] != null) {
           final previousAnswers = Map<String, String>.from(
             _currentAttempt['answers'],

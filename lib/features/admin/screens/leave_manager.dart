@@ -55,6 +55,7 @@ class _LeaveManagerState extends State<LeaveManager> {
 
     return Scaffold(
       appBar: ReuseAppbar(name: "Leave Manager"),
+      backgroundColor: Colors.white,
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
           : provider.leaveRequests.isEmpty
@@ -73,13 +74,13 @@ class _LeaveManagerState extends State<LeaveManager> {
                 final leaveId = leave['id'].toString();
                 final replyController = _controllerFor(leaveId);
 
-                // If you want to prefill controller from leave['admin_reply']
                 if (replyController.text.isEmpty &&
                     (leave['admin_reply'] ?? '').toString().isNotEmpty) {
                   replyController.text = leave['admin_reply'].toString();
                 }
 
                 return Card(
+                  color: Colors.white,
                   elevation: 3,
                   margin: const EdgeInsets.only(bottom: 12),
                   shape: RoundedRectangleBorder(

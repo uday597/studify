@@ -144,14 +144,13 @@ class _TeacherLeaveState extends State<TeacherLeave> {
                             listen: false,
                           ).addLeave(
                             userId: widget.teacherId,
-                            role: "student",
+                            role: "Teacher",
                             reason: reasonController.text.trim(),
                             fromDate: fromDate!,
                             toDate: toDate!,
                             adminId: widget.adminId,
                           );
 
-                          // CLEAR FIELDS AFTER SUBMIT
                           reasonController.clear();
                           fromDate = null;
                           toDate = null;

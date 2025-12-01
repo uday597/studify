@@ -46,10 +46,12 @@ class _ReportsState extends State<Reports> {
 
     return Scaffold(
       appBar: ReuseAppbar(name: "Reports"),
+      backgroundColor: Colors.white,
       body: selectedTab == 0
           ? buildStudentReportTab(batchProvider, studentProvider)
           : buildTeacherReportTab(teacherProvider),
       bottomNavigationBar: BottomAppBar(
+        color: Colors.white,
         child: Row(
           children: [
             Expanded(
@@ -176,6 +178,7 @@ class _ReportsState extends State<Reports> {
       context: context,
       builder: (_) {
         return Container(
+          color: Colors.white,
           padding: EdgeInsets.all(20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
